@@ -1,0 +1,102 @@
+param(
+    [string]$SourceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path,
+    [switch]$RetireClaudeCommands = $true,
+    [switch]$RetireCodexGeneratedWrappers = $true,
+    [switch]$RetireCodexClaudeSkillPrefixLinks = $true
+)
+
+$ErrorActionPreference = 'Stop'
+
+$ManifestPath = Join-Path $SourceRoot 'manifest.json'
+if (-not (Test-Path -LiteralPath $ManifestPath)) {
+    throw "Missing manifest: $ManifestPath"
+}
+
+$Manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
+$BackupRoot = Join-Path $SourceRoot 'backups'
+$Stamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
+
+function Ensure-Directory([string]$Path) {
+    New-Item -ItemType Directory -Path $Path -Force | Out-Null
+}
+
+function Move-ToBackup([string]$Path, [string]$Category) {
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return
+    }
+
+    $TargetDir = Join-Path $BackupRoot (Join-Path $Category $Stamp)
+    Ensure-Directory $TargetDir
+    $BackupPath = Join-Path $TargetDir (Split-Path -Leaf $Path)
+    Move-Item -LiteralPath $Path -Destination $BackupPath
+    Write-Host "Backed up $Path -> $BackupPath"
+}
+
+function Ensure-Junction([string]$LinkPath, [string]$TargetPath, [string]$BackupCategory) {
+    if (-not (Test-Path -LiteralPath $TargetPath)) {
+        throw "Cannot link missing target: $TargetPath"
+    }
+
+    if (Test-Path -LiteralPath $LinkPath) {
+        $Existing = Get-Item -LiteralPath $LinkPath -Force
+        $ExistingTarget = @($Existing.Target) -join ''
+        if ($Existing.LinkType -eq 'Junction' -and $ExistingTarget -eq $TargetPath) {
+            Write-Host "Already linked: $LinkPath"
+            return
+        }
+
+        Move-ToBackup $LinkPath $BackupCategory
+    }
+
+    New-Item -ItemType Junction -Path $LinkPath -Target $TargetPath | Out-Null
+    Write-Host "Linked $LinkPath -> $TargetPath"
+}
+
+function Get-SkillName($Skill) {
+    if ($Skill -is [string]) {
+        return $Skill
+    }
+
+    return $Skill.name
+}
+
+function Get-SkillSource($Skill) {
+    if ($Skill -is [string]) {
+        return Join-Path 'skills' $Skill
+    }
+
+    return Join-Path 'skills' $Skill.source
+}
+
+$ClaudeSkills = Join-Path $env:USERPROFILE '.claude\skills'
+$CodexSkills = Join-Path $env:USERPROFILE '.codex\skills'
+Ensure-Directory $ClaudeSkills
+Ensure-Directory $CodexSkills
+
+foreach ($Skill in $Manifest.managedSkills) {
+    $SkillName = Get-SkillName $Skill
+    $TargetPath = Join-Path $SourceRoot (Get-SkillSource $Skill)
+    Ensure-Junction (Join-Path $ClaudeSkills $SkillName) $TargetPath 'claude-skills'
+    Ensure-Junction (Join-Path $CodexSkills $SkillName) $TargetPath 'codex-skills'
+}
+
+if ($RetireClaudeCommands) {
+    $ClaudeCommands = Join-Path $env:USERPROFILE '.claude\commands'
+    if (Test-Path -LiteralPath $ClaudeCommands) {
+        Get-ChildItem -LiteralPath $ClaudeCommands -Filter '*.md' -File | ForEach-Object {
+            Move-ToBackup $_.FullName 'claude-commands'
+        }
+    }
+}
+
+if ($RetireCodexGeneratedWrappers) {
+    Get-ChildItem -LiteralPath $CodexSkills -Directory -Filter 'claude-command-*' -ErrorAction SilentlyContinue | ForEach-Object {
+        Move-ToBackup $_.FullName 'codex-generated-command-wrappers'
+    }
+}
+
+if ($RetireCodexClaudeSkillPrefixLinks) {
+    Get-ChildItem -LiteralPath $CodexSkills -Directory -Filter 'claude-skill-*' -ErrorAction SilentlyContinue | ForEach-Object {
+        Move-ToBackup $_.FullName 'codex-claude-skill-prefix-links'
+    }
+}
