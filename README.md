@@ -6,8 +6,10 @@ This repository is the source of truth for user-authored skills shared across Cl
 
 - `skills/` contains categorized real skill folders. Each leaf folder should include a `SKILL.md`.
 - `legacy-claude-commands/` preserves the old Claude Code slash command markdown files after conversion.
+- `scripts/sync-manifest.ps1` regenerates `manifest.json` from `skills/**/SKILL.md`.
 - `scripts/link.ps1` creates discovery junctions in `~/.claude/skills` and `~/.codex/skills`.
-- `scripts/validate.ps1` verifies every managed skill has a `SKILL.md` and matching junctions.
+- `scripts/check.ps1` verifies `manifest.json`, managed skill files, and matching junctions.
+- `.githooks/pre-commit` syncs generated metadata, refreshes discovery links, validates, and stages `manifest.json`.
 - `backups/` stores replaced discovery folders and retired command files from migrations.
 - `manifest.json` lists the managed skills and converted command sources.
 
@@ -29,11 +31,18 @@ This creates:
 
 ## Typical Workflow
 
-Create and edit skills in the appropriate category under `skills/`, update `manifest.json`, then run:
+Install the repository hook once:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\link.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\validate.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\install-hooks.ps1
+```
+
+After that, create and edit skills in the appropriate category under `skills/`. On commit, the hook stages skill-file changes, regenerates `manifest.json`, refreshes skill discovery links, validates the repo, and stages the generated manifest update automatically.
+
+For a manual check without committing, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
 ```
 
 Commit changes from this repository.
