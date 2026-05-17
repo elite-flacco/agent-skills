@@ -1,5 +1,5 @@
 ---
-name: nc-save-learning
+name: save-learning
 description: Use when the user asks to summarize learnings from the conversation and save to /learning.
 ---
 

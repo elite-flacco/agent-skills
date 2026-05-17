@@ -1,9 +1,9 @@
 ---
-name: nc-company-research
-description: Use when the user asks to perform comprehensive research on a given company.
+name: company-research
+description: Use when the user asks to perform comprehensive research on a given company for job application purposes.
 ---
 
-# Nc Company Research
+# Company Research
 
 # Perform Company Research
 

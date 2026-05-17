@@ -1,5 +1,5 @@
 ---
-name: nc-people-research
+name: people-research
 description: Use when the user asks to perform comprehensive research on a given person to prepare for an interview.
 ---
 

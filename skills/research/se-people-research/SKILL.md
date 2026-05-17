@@ -1,9 +1,9 @@
 ---
 name: se-people-research
-description: Use when the user asks to perform comprehensive research on a given company for se.
+description: Use when the user asks to perform comprehensive research on a given company for solutions engineering or sales engineering purposes.
 ---
 
-# Se People Research
+# SE People Research
 
 # Perform People Research
 

@@ -1,4 +1,4 @@
-﻿{
+{
     "sourceRoot":  "C:\\Users\\shuan\\Documents\\Projects\\personal-agent-skills",
     "managedSkills":  [
                           {
@@ -24,6 +24,10 @@
                           {
                               "name":  "commit",
                               "source":  "git/commit"
+                          },
+                          {
+                              "name":  "company-research",
+                              "source":  "research/company-research"
                           },
                           {
                               "name":  "create-pr",
@@ -74,18 +78,6 @@
                               "source":  "git/merge-branch"
                           },
                           {
-                              "name":  "nc-company-research",
-                              "source":  "research/nc-company-research"
-                          },
-                          {
-                              "name":  "nc-people-research",
-                              "source":  "research/nc-people-research"
-                          },
-                          {
-                              "name":  "nc-save-learning",
-                              "source":  "research/nc-save-learning"
-                          },
-                          {
                               "name":  "notion-page",
                               "source":  "docs/notion-page"
                           },
@@ -98,12 +90,20 @@
                               "source":  "cloud/openshift-update-app"
                           },
                           {
+                              "name":  "people-research",
+                              "source":  "research/people-research"
+                          },
+                          {
                               "name":  "project-bootstrap",
                               "source":  "project/project-bootstrap"
                           },
                           {
                               "name":  "remove-worktree",
                               "source":  "git/remove-worktree"
+                          },
+                          {
+                              "name":  "save-learning",
+                              "source":  "research/save-learning"
                           },
                           {
                               "name":  "se-company-research",
