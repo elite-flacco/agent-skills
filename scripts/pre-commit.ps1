@@ -20,11 +20,7 @@ Write-Host "Syncing skill manifest..."
 & (Join-Path $PSScriptRoot 'sync-manifest.ps1') -SourceRoot $SourceRoot
 
 Write-Host "Refreshing skill discovery links..."
-& (Join-Path $PSScriptRoot 'link.ps1') `
-    -SourceRoot $SourceRoot `
-    -RetireClaudeCommands:$false `
-    -RetireCodexGeneratedWrappers:$false `
-    -RetireCodexClaudeSkillPrefixLinks:$false
+& (Join-Path $PSScriptRoot 'link.ps1') -SourceRoot $SourceRoot
 
 Write-Host "Validating managed skills..."
 & (Join-Path $PSScriptRoot 'validate.ps1') -SourceRoot $SourceRoot

@@ -1,8 +1,5 @@
 param(
-    [string]$SourceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path,
-    [switch]$RetireClaudeCommands = $true,
-    [switch]$RetireCodexGeneratedWrappers = $true,
-    [switch]$RetireCodexClaudeSkillPrefixLinks = $true
+    [string]$SourceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 )
 
 $ErrorActionPreference = 'Stop'
@@ -78,25 +75,4 @@ foreach ($Skill in $Manifest.managedSkills) {
     $TargetPath = Join-Path $SourceRoot (Get-SkillSource $Skill)
     Ensure-Junction (Join-Path $ClaudeSkills $SkillName) $TargetPath 'claude-skills'
     Ensure-Junction (Join-Path $CodexSkills $SkillName) $TargetPath 'codex-skills'
-}
-
-if ($RetireClaudeCommands) {
-    $ClaudeCommands = Join-Path $env:USERPROFILE '.claude\commands'
-    if (Test-Path -LiteralPath $ClaudeCommands) {
-        Get-ChildItem -LiteralPath $ClaudeCommands -Filter '*.md' -File | ForEach-Object {
-            Move-ToBackup $_.FullName 'claude-commands'
-        }
-    }
-}
-
-if ($RetireCodexGeneratedWrappers) {
-    Get-ChildItem -LiteralPath $CodexSkills -Directory -Filter 'claude-command-*' -ErrorAction SilentlyContinue | ForEach-Object {
-        Move-ToBackup $_.FullName 'codex-generated-command-wrappers'
-    }
-}
-
-if ($RetireCodexClaudeSkillPrefixLinks) {
-    Get-ChildItem -LiteralPath $CodexSkills -Directory -Filter 'claude-skill-*' -ErrorAction SilentlyContinue | ForEach-Object {
-        Move-ToBackup $_.FullName 'codex-claude-skill-prefix-links'
-    }
 }

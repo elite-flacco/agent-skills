@@ -12,22 +12,6 @@ if (-not (Test-Path -LiteralPath $SkillsRoot)) {
     throw "Missing skills directory: $SkillsRoot"
 }
 
-$ExistingRetiredDiscovery = [ordered]@{
-    claudeCommandMarkdown = $true
-    codexGeneratedClaudeCommandWrappers = $true
-    codexClaudeSkillPrefixJunctions = $true
-}
-
-if (Test-Path -LiteralPath $ManifestPath) {
-    $ExistingManifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
-    if ($ExistingManifest.retiredDiscovery) {
-        $ExistingRetiredDiscovery = [ordered]@{}
-        foreach ($Property in $ExistingManifest.retiredDiscovery.PSObject.Properties) {
-            $ExistingRetiredDiscovery[$Property.Name] = $Property.Value
-        }
-    }
-}
-
 $SkillRootWithSeparator = $SkillsRoot.TrimEnd('\') + '\'
 $ManagedSkills = Get-ChildItem -LiteralPath $SkillsRoot -Recurse -Filter 'SKILL.md' -File |
     ForEach-Object {
@@ -45,7 +29,6 @@ $ManagedSkills = Get-ChildItem -LiteralPath $SkillsRoot -Recurse -Filter 'SKILL.
 $Manifest = [pscustomobject][ordered]@{
     sourceRoot = $SourceRoot
     managedSkills = @($ManagedSkills)
-    retiredDiscovery = [pscustomobject]$ExistingRetiredDiscovery
 }
 
 $DesiredJson = ($Manifest | ConvertTo-Json -Depth 10) + [Environment]::NewLine
@@ -56,8 +39,17 @@ if ($Check) {
         exit 1
     }
 
-    $CurrentJson = Get-Content -LiteralPath $ManifestPath -Raw
-    if ($CurrentJson -ne $DesiredJson) {
+    $CurrentManifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
+    $CurrentComparable = [pscustomobject][ordered]@{
+        sourceRoot = $CurrentManifest.sourceRoot
+        managedSkills = @($CurrentManifest.managedSkills)
+    } | ConvertTo-Json -Depth 10
+    $DesiredComparable = [pscustomobject][ordered]@{
+        sourceRoot = $Manifest.sourceRoot
+        managedSkills = @($Manifest.managedSkills)
+    } | ConvertTo-Json -Depth 10
+
+    if ($CurrentComparable -ne $DesiredComparable) {
         Write-Error "manifest.json is stale. Run scripts/sync-manifest.ps1 or commit with the repo hook enabled."
         exit 1
     }
