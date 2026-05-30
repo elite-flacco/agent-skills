@@ -1,6 +1,6 @@
 ---
 name: project-bootstrap
-description: Use when starting a brand new project, scaffolding a fresh repo, or before running superpowers:writing-plans / executing-plans / subagent-driven-development on a repo that lacks lint/typecheck/format scripts, CI workflows, or a SubagentStop verify hook. Triggers on requests like "bootstrap this project", "set up new project", "/project-bootstrap".
+description: Use when starting a brand new project, scaffolding a fresh repo, or before running superpowers:writing-plans / executing-plans / subagent-driven-development on a repo that lacks lint/typecheck/format scripts, CI workflows, or a SubagentStop verify hook. Triggers on requests like "bootstrap this project", "set up new project", or "use project-bootstrap".
 ---
 
 # Project Bootstrap
@@ -28,11 +28,11 @@ git status
 
 ### Step 2 — Add scripts
 
-Use the `project-add-scripts` skill. It adds `lint`, `typecheck`, `format`, `format:check` to `package.json`, installs deps, and verifies each runs clean. Fix any surfaced issues before continuing.
+Use the `add-scripts` skill. It adds `lint`, `typecheck`, `format`, `format:check` to `package.json`, installs deps, and verifies each runs clean. Fix any surfaced issues before continuing.
 
 ### Step 3 — Add CI workflows
 
-Use the `add-gh-workflows` skill. It copies `~/.claude/github/` defaults into `.github/` and adds changelog/readme commands under `.claude/commands/`.
+Use the `add-gh-workflows` skill. It copies `~/.claude/github/` defaults into `.github/` and confirms the shared `update-changelog` and `update-readme` skills are available.
 
 After it finishes, open `.github/workflows/ci.yml` and confirm the job runs:
 

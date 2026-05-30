@@ -69,7 +69,7 @@ export default function RootLayout({
 
 ### 3. Create Theme Toggle Component
 
-Do this if user typed `cc-add-theme-toggle --dropdown`, otherwise use the single button option below.
+Do this if the user asked for `add-theme-toggle --dropdown`, otherwise use the single button option below.
 
 Create `components/theme-toggle.tsx`:
 

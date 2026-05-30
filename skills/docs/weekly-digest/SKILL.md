@@ -1,6 +1,6 @@
 ---
 name: weekly-digest
-description: Use when the user wants to summarize their weekly Claude Code and Codex activity, generate a weekly digest, review what they worked on, or run /weekly-digest.
+description: Use when the user wants to summarize their weekly Claude Code and Codex activity, generate a weekly digest, review what they worked on, or use weekly-digest.
 ---
 
 # Weekly Digest
@@ -10,8 +10,8 @@ Scan Claude Code and Codex activity logs to produce a weekly summary of what was
 ## Usage
 
 ```
-/weekly-digest <mode>          # current week (Monday through today)
-/weekly-digest <mode> last     # previous completed week (Mon-Sun)
+weekly-digest <mode>          # current week (Monday through today)
+weekly-digest <mode> last     # previous completed week (Mon-Sun)
 ```
 
 - `mode` is required: `work` or `personal` (determines output folder)

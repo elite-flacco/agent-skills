@@ -66,6 +66,18 @@ If the user mentions copying or pasting into Outlook, treat that as a separate r
 - Avoid relying on inline-block pills or margin-like spacing patterns that Outlook paste tends to collapse or exaggerate.
 - Preserve inner card padding unless the user asks for a tighter overall layout.
 
+#### Spacer row rule (critical — prevents "white banded rows" in Outlook paste)
+- **Never use `font-size:0; line-height:0` on spacer `<td>` cells.** Outlook's Word paste engine treats those cells unpredictably and often injects a default white background, producing visible white bands between cards in light mode and even worse contrast in dark mode (where the white bands stand out against the dark compose canvas).
+- For every spacer `<tr><td>…</td></tr>`, set explicit `height`, `font-size`, and `line-height` all equal to the desired pixel value, plus `mso-line-height-rule:exactly`, and put `&nbsp;` inside the cell.
+- Pattern: `<tr><td style="height:12px; font-size:12px; line-height:12px; mso-line-height-rule:exactly;">&nbsp;</td></tr>` — adjust the number for the spacer height (8, 10, 12, 16, 28, 32, etc.). All three values must match.
+- Do **not** set an explicit `background-color` on spacer cells to "fix" bands. That breaks dark-mode adaptation, since the bg becomes a fixed light color visible against dark compose backgrounds. Let the spacer be transparent and rely on the matched font/line-height pattern above.
+- This rule applies to every vertical spacer: between cards, between sections, around dividers, around headings.
+
+#### Card layout pattern for Outlook paste
+- Cards live as their own `<tr>` rows inside the 600px content table. Each card is a nested `<table>` with `background-color:#ffffff`, border, and `border-radius`, wrapped in a `<td>`.
+- Place spacer rows (using the rule above) between cards rather than `margin-bottom` on the card tables — Word paste strips margins.
+- Keep inner card padding via `padding` on the inner `<td>` (longhand: `padding-top`, `padding-right`, `padding-bottom`, `padding-left`) so Outlook respects it consistently.
+
 ### Images
 - Set `width`, `height`, `alt`, `border="0"`, `style="display:block"` on every `<img>`.
 - Replace SVG with a note/comment that a PNG/JPG alternative is needed.
