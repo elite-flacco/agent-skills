@@ -1,154 +1,149 @@
 {
-    "sourceRoot":  "C:\\Users\\shuan\\Documents\\Projects\\personal-agent-skills",
-    "managedSkills":  [
-                          {
-                              "name":  "add-gh-workflows",
-                              "source":  "git/add-gh-workflows"
-                          },
-                          {
-                              "name":  "add-scripts",
-                              "source":  "project/add-scripts"
-                          },
-                          {
-                              "name":  "add-theme-toggle",
-                              "source":  "frontend/add-theme-toggle"
-                          },
-                          {
-                              "name":  "azdo-create-pr",
-                              "source":  "integrations/azdo-create-pr"
-                          },
-                          {
-                              "name":  "clean-branches",
-                              "source":  "git/clean-branches"
-                          },
-                          {
-                              "name":  "commit",
-                              "source":  "git/commit"
-                          },
-                          {
-                              "name":  "company-research",
-                              "source":  "research/company-research"
-                          },
-                          {
-                              "name":  "create-pr",
-                              "source":  "git/create-pr"
-                          },
-                          {
-                              "name":  "create-worktree",
-                              "source":  "git/create-worktree"
-                          },
-                          {
-                              "name":  "create-worktrees-for-pr",
-                              "source":  "git/create-worktrees-for-pr"
-                          },
-                          {
-                              "name":  "deploy-supabase-edge-function",
-                              "source":  "integrations/deploy-supabase-edge-function"
-                          },
-                          {
-                              "name":  "design-inspirations",
-                              "source":  "frontend/design-inspirations"
-                          },
-                          {
-                              "name":  "design-mode",
-                              "source":  "frontend/design-mode"
-                          },
-                          {
-                              "name":  "explain-to-me",
-                              "source":  "meta/explain-to-me"
-                          },
-                          {
-                              "name":  "fluid-typography",
-                              "source":  "frontend/fluid-typography"
-                          },
-                          {
-                              "name":  "frontend-rules",
-                              "source":  "frontend/frontend-rules"
-                          },
-                          {
-                              "name":  "html-to-email",
-                              "source":  "docs/html-to-email"
-                          },
-                          {
-                              "name":  "init-project",
-                              "source":  "project/init-project"
-                          },
-                          {
-                              "name":  "merge-branch",
-                              "source":  "git/merge-branch"
-                          },
-                          {
-                              "name":  "notion-page",
-                              "source":  "docs/notion-page"
-                          },
-                          {
-                              "name":  "openshift-deploy-nextjs",
-                              "source":  "cloud/openshift-deploy-nextjs"
-                          },
-                          {
-                              "name":  "openshift-update-app",
-                              "source":  "cloud/openshift-update-app"
-                          },
-                          {
-                              "name":  "people-research",
-                              "source":  "research/people-research"
-                          },
-                          {
-                              "name":  "project-bootstrap",
-                              "source":  "project/project-bootstrap"
-                          },
-                          {
-                              "name":  "remove-worktree",
-                              "source":  "git/remove-worktree"
-                          },
-                          {
-                              "name":  "save-learning",
-                              "source":  "research/save-learning"
-                          },
-                          {
-                              "name":  "se-company-research",
-                              "source":  "research/se-company-research"
-                          },
-                          {
-                              "name":  "se-people-research",
-                              "source":  "research/se-people-research"
-                          },
-                          {
-                              "name":  "setup-design-system",
-                              "source":  "frontend/setup-design-system"
-                          },
-                          {
-                              "name":  "setup-design-system-tw",
-                              "source":  "frontend/setup-design-system-tw"
-                          },
-                          {
-                              "name":  "show-prs",
-                              "source":  "git/show-prs"
-                          },
-                          {
-                              "name":  "skill-creator",
-                              "source":  "meta/skill-creator"
-                          },
-                          {
-                              "name":  "theme-toggle-creator",
-                              "source":  "frontend/theme-toggle-creator"
-                          },
-                          {
-                              "name":  "update-changelog",
-                              "source":  "docs/update-changelog"
-                          },
-                          {
-                              "name":  "update-readme",
-                              "source":  "docs/update-readme"
-                          },
-                          {
-                              "name":  "weekly-digest",
-                              "source":  "docs/weekly-digest"
-                          }
-                      ],
-    "retiredDiscovery":  {
-                             "claudeCommandMarkdown":  true,
-                             "codexGeneratedClaudeCommandWrappers":  true,
-                             "codexClaudeSkillPrefixJunctions":  true
-                         }
+    "sourceRoot": "C:\\Users\\shuan\\Documents\\Projects\\personal-agent-skills",
+    "managedSkills": [
+        {
+            "name": "add-gh-workflows",
+            "source": "git/add-gh-workflows"
+        },
+        {
+            "name": "add-scripts",
+            "source": "project/add-scripts"
+        },
+        {
+            "name": "add-theme-toggle",
+            "source": "frontend/add-theme-toggle"
+        },
+        {
+            "name": "azdo-create-pr",
+            "source": "integrations/azdo-create-pr"
+        },
+        {
+            "name": "clean-branches",
+            "source": "git/clean-branches"
+        },
+        {
+            "name": "commit",
+            "source": "git/commit"
+        },
+        {
+            "name": "company-research",
+            "source": "research/company-research"
+        },
+        {
+            "name": "create-pr",
+            "source": "git/create-pr"
+        },
+        {
+            "name": "create-worktree",
+            "source": "git/create-worktree"
+        },
+        {
+            "name": "create-worktrees-for-pr",
+            "source": "git/create-worktrees-for-pr"
+        },
+        {
+            "name": "deploy-supabase-edge-function",
+            "source": "integrations/deploy-supabase-edge-function"
+        },
+        {
+            "name": "design-inspirations",
+            "source": "frontend/design-inspirations"
+        },
+        {
+            "name": "design-mode",
+            "source": "frontend/design-mode"
+        },
+        {
+            "name": "explain-to-me",
+            "source": "meta/explain-to-me"
+        },
+        {
+            "name": "fluid-typography",
+            "source": "frontend/fluid-typography"
+        },
+        {
+            "name": "frontend-rules",
+            "source": "frontend/frontend-rules"
+        },
+        {
+            "name": "html-to-email",
+            "source": "docs/html-to-email"
+        },
+        {
+            "name": "init-project",
+            "source": "project/init-project"
+        },
+        {
+            "name": "merge-branch",
+            "source": "git/merge-branch"
+        },
+        {
+            "name": "notion-page",
+            "source": "docs/notion-page"
+        },
+        {
+            "name": "openshift-deploy-nextjs",
+            "source": "cloud/openshift-deploy-nextjs"
+        },
+        {
+            "name": "openshift-update-app",
+            "source": "cloud/openshift-update-app"
+        },
+        {
+            "name": "people-research",
+            "source": "research/people-research"
+        },
+        {
+            "name": "project-bootstrap",
+            "source": "project/project-bootstrap"
+        },
+        {
+            "name": "remove-worktree",
+            "source": "git/remove-worktree"
+        },
+        {
+            "name": "save-learning",
+            "source": "research/save-learning"
+        },
+        {
+            "name": "se-company-research",
+            "source": "research/se-company-research"
+        },
+        {
+            "name": "se-people-research",
+            "source": "research/se-people-research"
+        },
+        {
+            "name": "setup-design-system",
+            "source": "frontend/setup-design-system"
+        },
+        {
+            "name": "setup-design-system-tw",
+            "source": "frontend/setup-design-system-tw"
+        },
+        {
+            "name": "show-prs",
+            "source": "git/show-prs"
+        },
+        {
+            "name": "skill-creator",
+            "source": "meta/skill-creator"
+        },
+        {
+            "name": "theme-toggle-creator",
+            "source": "frontend/theme-toggle-creator"
+        },
+        {
+            "name": "update-changelog",
+            "source": "docs/update-changelog"
+        },
+        {
+            "name": "update-readme",
+            "source": "docs/update-readme"
+        },
+        {
+            "name": "weekly-digest",
+            "source": "docs/weekly-digest"
+        }
+    ]
 }
