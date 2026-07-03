@@ -74,6 +74,10 @@
             "source": "project/init-project"
         },
         {
+            "name": "langsmith-clear-feedback",
+            "source": "integrations/langsmith-clear-feedback"
+        },
+        {
             "name": "merge-branch",
             "source": "git/merge-branch"
         },

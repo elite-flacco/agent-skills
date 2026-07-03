@@ -66,14 +66,20 @@ function ensureSymlink(linkPath, targetPath, backupCategory) {
 
 const claudeSkills = path.join(os.homedir(), '.claude', 'skills');
 const codexSkills = path.join(os.homedir(), '.codex', 'skills');
+const piSkills = path.join(os.homedir(), '.pi', 'agent', 'skills');
+const zcodeSkills = path.join(os.homedir(), '.zcode', 'skills');
 ensureDir(claudeSkills);
 ensureDir(codexSkills);
+ensureDir(piSkills);
+ensureDir(zcodeSkills);
 
 for (const skill of manifest.managedSkills) {
   const targetPath = path.join(sourceRoot, 'skills', skill.source);
   ensureSymlink(path.join(claudeSkills, skill.name), targetPath, 'claude-skills');
   ensureSymlink(path.join(codexSkills, skill.name), targetPath, 'codex-skills');
+  ensureSymlink(path.join(piSkills, skill.name), targetPath, 'pi-skills');
+  ensureSymlink(path.join(zcodeSkills, skill.name), targetPath, 'zcode-skills');
 }
 
-console.log(`Linked ${manifest.managedSkills.length} skills into ${claudeSkills} and ${codexSkills}.`);
+console.log(`Linked ${manifest.managedSkills.length} skills into ${claudeSkills}, ${codexSkills}, ${piSkills}, and ${zcodeSkills}.`);
 NODE

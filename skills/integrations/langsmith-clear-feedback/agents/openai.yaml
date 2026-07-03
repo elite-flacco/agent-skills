@@ -1,0 +1,4 @@
+interface:
+  display_name: "LangSmith Clear Feedback"
+  short_description: "Delete duplicate LangSmith feedback scores"
+  default_prompt: "Use $langsmith-clear-feedback to dry-run and delete duplicate evaluator feedback scores for a LangSmith experiment."

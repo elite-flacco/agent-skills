@@ -8,12 +8,14 @@ This repository is the source of truth for user-authored skills shared across Cl
 - `legacy-claude-commands/` preserves the old Claude Code slash command markdown files after conversion.
 - `scripts/` contains PowerShell scripts for Windows; `scripts/macos/` contains bash equivalents.
   - `sync-manifest` regenerates `manifest.json` from `skills/**/SKILL.md`.
-  - `link` creates discovery junctions/symlinks in `~/.claude/skills` and `~/.codex/skills`.
+  - `link` creates discovery junctions/symlinks in `~/.claude/skills`, `~/.codex/skills`, `~/.pi/agent/skills`, and `~/.zcode/skills`.
   - `check` verifies `manifest.json`, managed skill files, and matching junctions.
   - `validate` checks `SKILL.md` files for corrupted UTF-8.
 - `.githooks/pre-commit` detects the OS and delegates to the platform-specific scripts. It syncs generated metadata, refreshes discovery links, validates, and stages `manifest.json`.
 - `backups/` stores replaced discovery folders when a setup script needs to move an existing conflicting path out of the way.
 - `manifest.json` lists the managed skills.
+
+Sync only creates/updates a symlink per managed skill (named after `manifest.json`'s `name` field) inside each agent's skills folder — it never touches or replaces the folder as a whole. This is intentional: it lets `~/.claude/skills`, `~/.codex/skills`, `~/.pi/agent/skills`, and `~/.zcode/skills` also hold skills you download or install from elsewhere, alongside the ones managed by this repo.
 
 Discovery folders remain flat. `manifest.json` maps each flat discovery name to a categorized source folder:
 
@@ -29,6 +31,8 @@ This creates:
 ```text
 ~/.claude/skills/git-commit -> skills/git/commit
 ~/.codex/skills/git-commit  -> skills/git/commit
+~/.pi/agent/skills/git-commit -> skills/git/commit
+~/.zcode/skills/git-commit -> skills/git/commit
 ```
 
 ## Typical Workflow

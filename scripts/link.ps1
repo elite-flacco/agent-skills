@@ -67,12 +67,15 @@ function Get-SkillSource($Skill) {
 
 $ClaudeSkills = Join-Path $env:USERPROFILE '.claude\skills'
 $CodexSkills = Join-Path $env:USERPROFILE '.codex\skills'
+$ZcodeSkills = Join-Path $env:USERPROFILE '.zcode\skills'
 Ensure-Directory $ClaudeSkills
 Ensure-Directory $CodexSkills
+Ensure-Directory $ZcodeSkills
 
 foreach ($Skill in $Manifest.managedSkills) {
     $SkillName = Get-SkillName $Skill
     $TargetPath = Join-Path $SourceRoot (Get-SkillSource $Skill)
     Ensure-Junction (Join-Path $ClaudeSkills $SkillName) $TargetPath 'claude-skills'
     Ensure-Junction (Join-Path $CodexSkills $SkillName) $TargetPath 'codex-skills'
+    Ensure-Junction (Join-Path $ZcodeSkills $SkillName) $TargetPath 'zcode-skills'
 }
