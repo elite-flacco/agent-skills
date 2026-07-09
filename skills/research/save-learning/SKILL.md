@@ -34,7 +34,7 @@ You are helping the user capture and preserve knowledge from your conversation. 
 
 ## Input
 
-Optional topic hint: $ARGUMENTS
+The user may provide an optional topic hint in their request; use it if present, otherwise suggest one.
 
 ## Output Format
 

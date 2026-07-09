@@ -8,8 +8,8 @@ description: Use when the user asks to perform comprehensive research on a given
 # Perform People Research
 
 ## Instructions
-1. Find the interviewer and link to job description at $ARGUMENTS using Notion MCP.
-1. Perform comprehensive research on the interviewer to help user prepare for the interview . Return the findings in the following format: -
+1. Identify the interviewer and link to the job description using Notion MCP (ask the user for the relevant Notion page if not provided).
+1. Perform comprehensive research on the interviewer to help user prepare for the interview. Return the findings in the following format: -
 
 ```markdown
 ## 1. Quick Snapshot (3–5 bullets)
@@ -46,4 +46,4 @@ Include links to sources as bullet points
 ```
 
 2. Return the result in a clean, structured format with clear markdown-style headings and bullet points. Keep it concise but insightful. 
-3. Add the research results to the provided Notion page $ARGUMENTS, with the content being properly formatted as markdown (use patch-block-children).
+3. Add the research results to the provided Notion page, with the content being properly formatted as markdown (use patch-block-children).

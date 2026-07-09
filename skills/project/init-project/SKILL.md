@@ -12,8 +12,8 @@ Initialize new project with essential structure
 ## Instructions
 
 1. **Project Analysis and Setup**
-   - Parse the project type and framework from arguments: `$ARGUMENTS`
-   - If no arguments provided, analyze current directory and ask user for project type and framework
+   - Determine the project type and framework the user wants (ask if not clear from the request or current directory)
+   - Analyze current directory to infer project type if not specified
    - Create project directory structure if needed
    - Validate that the chosen framework is appropriate for the project type
 

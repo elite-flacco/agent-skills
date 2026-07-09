@@ -11,7 +11,7 @@ Clean up merged and stale git branches
 
 ## Instructions
 
-Follow this systematic approach to clean up git branches: **$ARGUMENTS**
+Follow this systematic approach to clean up git branches.
 
 1. **Repository State Analysis**
    - Check current branch and uncommitted changes

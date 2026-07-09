@@ -1,6 +1,6 @@
 ---
 name: setup-design-system-tw
-description: Set up a maintainable Tailwind CSS v4 design system with semantic tokens, fluid typography, badge color palette, and component classes. Invoke this skill when scaffolding a new frontend project or when globals.css doesn't exist yet.
+description: Use when scaffolding a new frontend project on Tailwind CSS v4, when globals.css doesn't exist yet, or when the user wants to set up a v4 design system with semantic tokens, fluid typography, a badge color palette, and component classes.
 ---
 
 # Set Up Tailwind v4 Design System

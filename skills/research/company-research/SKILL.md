@@ -8,7 +8,7 @@ description: Use when the user asks to perform comprehensive research on a given
 # Perform Company Research
 
 ## Instructions
-1. Perform comprehensive research on the given company $ARGUMENTS, including information such as below -
+1. Perform comprehensive research on the company the user names, including information such as below -
 
 ```markdown
 ## 1. Company Overview

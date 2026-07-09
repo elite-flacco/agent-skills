@@ -83,7 +83,6 @@ Where DESCRIPTION_TEXT follows this structure:
 - [ ] Checklist item 2
 - [ ] Verify feature X works
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
 **Guidelines for PR description:**

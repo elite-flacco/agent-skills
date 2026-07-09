@@ -17,10 +17,10 @@ Use this skill for deleting or inspecting LangSmith feedback records, especially
 
 ## Script
 
-Use the bundled script:
+Use the bundled script (path is relative to this skill's directory):
 
 ```bash
-python3 /Users/shuang/Documents/Projects/agent-skills/skills/integrations/langsmith-clear-feedback/scripts/clear_feedback.py \
+python3 scripts/clear_feedback.py \
   --session-id <experiment-or-project-id> \
   --key <feedback-key> \
   --source auto_eval
@@ -37,7 +37,7 @@ set -a; source .env; set +a
 Dry-run is the default. It prints matching feedback record IDs, run IDs, scores, source metadata, and comments.
 
 ```bash
-python3 .../clear_feedback.py --session-id <uuid> --key correctness --source auto_eval
+python3 scripts/clear_feedback.py --session-id <uuid> --key correctness --source auto_eval
 ```
 
 ## Delete
@@ -45,7 +45,7 @@ python3 .../clear_feedback.py --session-id <uuid> --key correctness --source aut
 Only delete after reviewing the dry-run output:
 
 ```bash
-python3 .../clear_feedback.py \
+python3 scripts/clear_feedback.py \
   --session-id <uuid> \
   --key correctness \
   --source auto_eval \

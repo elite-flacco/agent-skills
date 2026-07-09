@@ -19,7 +19,7 @@
         },
         {
             "name": "azdo-create-pr",
-            "source": "integrations/azdo-create-pr"
+            "source": "git/azdo-create-pr"
         },
         {
             "name": "clean-branches",
@@ -122,14 +122,6 @@
             "source": "research/save-learning"
         },
         {
-            "name": "se-company-research",
-            "source": "research/se-company-research"
-        },
-        {
-            "name": "se-people-research",
-            "source": "research/se-people-research"
-        },
-        {
             "name": "setup-design-system",
             "source": "frontend/setup-design-system"
         },
@@ -144,10 +136,6 @@
         {
             "name": "skill-creator",
             "source": "meta/skill-creator"
-        },
-        {
-            "name": "theme-toggle-creator",
-            "source": "frontend/theme-toggle-creator"
         },
         {
             "name": "update-changelog",

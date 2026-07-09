@@ -1,11 +1,11 @@
 ---
 name: weekly-digest
-description: Use when the user wants to summarize their weekly Claude Code and Codex activity, generate a weekly digest, review what they worked on, or use weekly-digest.
+description: Use when the user wants to summarize their weekly coding-agent activity, generate a weekly digest, review what they worked on, or use weekly-digest. Covers Claude Code, Codex, Pi, and ZCode sessions.
 ---
 
 # Weekly Digest
 
-Scan Claude Code and Codex activity logs to produce a weekly summary of what was accomplished, saved as a markdown file.
+Scan activity logs across coding agents (Claude Code, Codex, Pi, ZCode) to produce a weekly summary of what was accomplished, saved as a markdown file. Skip any agent whose log directory doesn't exist (e.g. an agent isn't installed).
 
 ## Usage
 
@@ -61,7 +61,37 @@ Scan ALL `*.jsonl` files under `~/.claude/projects/*/` (exclude subdirectories l
 - `text` — the user's prompt
 - `session_id` — to correlate with session index
 
-### Step 4: Generate the summary
+### Step 4: Gather Pi sessions
+
+Skip if `~/.pi/agent/sessions/` doesn't exist.
+
+Pi stores one `.jsonl` per session under `~/.pi/agent/sessions/<encoded-cwd>/`. The directory name encodes the working directory by replacing path separators and root with `--` (e.g. `--Users-name-Documents-Projects-foo--` decodes to `/Users/name/Documents/Projects/foo`).
+
+**Per session file:**
+- **First line** is `{"type":"session",...}` — read `cwd` and `timestamp` (created date).
+- **File mtime** = last activity; a session started Friday but active Monday belongs in both weeks.
+- **User prompts** — scan for `{"type":"message","message":{"role":"user","content":[{"type":"text","text":"..."}]}}` entries; collect the first 3–5 meaningful ones.
+
+Filter by first-line `timestamp` (created) OR mtime (modified) falling within the target range. Derive the project name from the `cwd`.
+
+### Step 5: Gather ZCode sessions
+
+Skip if `~/.zcode/cli/agents/` doesn't exist.
+
+ZCode stores sessions under `~/.zcode/cli/agents/sess_<id>/agent_<id>/`. Each `agent_<id>` dir has a `metadata.json` and `transcript.jsonl`.
+
+**Per session (read `metadata.json`):**
+- `cwd` / `workspaceRoot` — working directory (derive project name)
+- `createdAt`, `updatedAt` — timestamps (ISO 8601)
+- `prompt` / `description` — the task prompt / short description
+- `status` — `completed`, etc.
+- `profileId` — agent profile (e.g. `Explore`, main); useful to distinguish subagent runs from main sessions
+
+Filter by `createdAt` OR `updatedAt` within the target range. The `prompt`/`description` is the session summary — no need to parse the transcript for a digest (transcript is verbose).
+
+**Note:** Most ZCode sessions here are subagent runs (Explore, etc.). Group by `workspaceRoot` for project attribution. Flag `profileId` if useful, but the main value is the `description` + `cwd`.
+
+### Step 6: Generate the summary
 
 Create a markdown file with this structure:
 
@@ -94,10 +124,26 @@ worked on, key accomplishments, patterns noticed. Be specific about project name
 - Thread name / prompt description
 - ...
 
+## Pi Activity
+
+### project-name
+
+- Session prompt description
+- ...
+
+## ZCode Activity
+
+### project-name
+
+- Session description / prompt (note profileId if a subagent)
+- ...
+
 ## Stats
 
 - **Total Claude Code sessions:** N
 - **Total Codex sessions:** N
+- **Total Pi sessions:** N
+- **Total ZCode sessions:** N
 - **Most active project:** project-name (N sessions)
 - **Days active:** N/7
 ```
@@ -106,9 +152,10 @@ Guidelines for the narrative summary:
 - Mention specific project names and what was done
 - Note if a project dominated the week
 - Mention any cross-project patterns (e.g. "focused on UI work across multiple projects")
+- Note activity split across agents if notable (e.g. "most work in Claude Code; used ZCode Explore for codebase research")
 - Keep it factual — this is a personal activity log, not a performance review
 
-### Step 5: Save the file
+### Step 7: Save the file
 
 ```bash
 mkdir -p <cwd>/<mode>/weekly-summaries
@@ -122,8 +169,10 @@ If the file already exists, ask before overwriting.
 
 | Mistake | Fix |
 |---------|-----|
-| Filtering only by `created` date | Check both `created` AND `modified` — a session started Friday but continued Monday belongs in both weeks |
-| Hardcoding project paths | Always discover from `~/.claude/projects/` and `~/.codex/` dynamically |
+| Filtering only by `created` date | Check both created AND modified/updated — a session started Friday but continued Monday belongs in both weeks |
+| Hardcoding project paths | Always discover dynamically from each agent's log dir |
 | Missing Codex data | Check both `session_index.jsonl` and `history.jsonl` — some sessions may only appear in one |
+| Missing an agent's data | Each agent's dir may not exist (agent not installed) — check existence first and skip silently |
 | Wrong week boundaries | Monday 00:00:00 through Sunday 23:59:59 in local time |
 | Empty projects in output | Skip projects with 0 sessions in the target range |
+| ZCode noise | ZCode `metadata.json` covers mostly subagent runs — group by `workspaceRoot`, flag `profileId` only if useful |

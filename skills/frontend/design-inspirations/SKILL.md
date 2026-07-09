@@ -1,6 +1,6 @@
 ---
 name: design-inspirations
-description: Create different visual variations of UI components. Use when asked to create multiple design variations of explore different visual styles, or generate alternative design directions for components, pages, or layouts.
+description: Use when the user wants multiple visual variations of a UI (e.g. landing page, dashboard, button) to explore different design directions — e.g. asks for "design variations", "alternatives", "explore styles", "a few takes on", or wants variations side-by-side in the browser.
 ---
 
 # Design Inspirations

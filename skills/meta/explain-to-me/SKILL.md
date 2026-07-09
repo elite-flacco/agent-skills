@@ -5,7 +5,7 @@ description: Use when the user asks for an explanation of an error, command outp
 
 # Explain To Me
 
-Given the following error message $ARGUMENTS:
+Given the error message, command output, code, or issue the user is asking about:
 
 1. Explain what the error means, in plain but technically accurate language.
 2. Explain why this error typically occurs, including common scenarios that trigger it.

@@ -9,9 +9,14 @@ Create effective, well-structured skills through collaborative interview. Suppor
 
 ## Default Target
 
-Create user-authored skills in `C:\Users\shuan\Documents\Projects\personal-agent-skills\skills\<category>\<skill-folder>` unless the user explicitly asks for another location.
+Create user-authored skills under `skills/<category>/<skill-folder>` in this repository (the agent-skills repo) unless the user explicitly asks for another location.
 
-After creating or renaming a skill, run `C:\Users\shuan\Documents\Projects\personal-agent-skills\scripts\link.ps1` so Claude Code and Codex discover the shared source folder through their user skill directories. Do not create new user-authored skills directly under `~/.claude/skills` or `~/.codex/skills`; those directories are discovery surfaces.
+After creating or renaming a skill, run the link script so all agents (Claude Code, Codex, Pi, ZCode) discover it through their user skill directories:
+
+- **macOS:** `./scripts/macos/link.sh`
+- **Windows:** `powershell -ExecutionPolicy Bypass -File .\scripts\link.ps1`
+
+Do not create new user-authored skills directly under `~/.claude/skills`, `~/.codex/skills`, `~/.pi/agent/skills`, or `~/.zcode/skills`; those directories are discovery surfaces.
 
 ## Workflow
 
@@ -44,8 +49,8 @@ Ask: What should this skill do? Get a clear one-sentence description of the skil
 
 ## Step 2: Explore Context
 
-- Check `C:\Users\shuan\Documents\Projects\personal-agent-skills\skills\` for existing user-authored skills that overlap or could serve as patterns
-- Check `~/.claude/skills/` and `~/.codex/skills/` only when validating discovery links
+- Check `skills/` in this repo for existing user-authored skills that overlap or could serve as patterns
+- Check the discovery dirs (`~/.claude/skills/`, `~/.codex/skills/`, `~/.pi/agent/skills/`, `~/.zcode/skills/`) only when validating discovery links
 - Check the user's project for domain context if relevant
 - Note any existing conventions to follow
 
@@ -68,8 +73,10 @@ Read `instructions/authoring-rules.md` for CSO, frontmatter, and writing guideli
 
 - **Simple mode:** Write single SKILL.md using `templates/simple-skill.md`
 - **Structured mode:** Create directories and files. Use `templates/structured-skill.md` for the orchestrator SKILL.md. Read `references/structured-directory-spec.md` for what goes in each directory. If the skill has an eval layer, read `references/eval-layer-guide.md`.
-- Update `C:\Users\shuan\Documents\Projects\personal-agent-skills\manifest.json` so the new skill appears in `managedSkills` with a flat discovery `name` and categorized `source`.
-- Run `C:\Users\shuan\Documents\Projects\personal-agent-skills\scripts\link.ps1`, then `C:\Users\shuan\Documents\Projects\personal-agent-skills\scripts\validate.ps1`.
+- Update `manifest.json` (repo root) so the new skill appears in `managedSkills` with a flat discovery `name` and categorized `source`. On commit, the pre-commit hook regenerates this automatically — run `./scripts/macos/sync-manifest.sh` (macOS) or `.\scripts\sync-manifest.ps1` (Windows) to update it manually.
+- Run the link and validate scripts:
+  - **macOS:** `./scripts/macos/link.sh` then `./scripts/macos/validate.sh`
+  - **Windows:** `.\scripts\link.ps1` then `.\scripts\validate.ps1`
 
 ## Step 6: Review & Iterate
 
