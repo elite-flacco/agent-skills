@@ -14,6 +14,10 @@
             "source": "frontend/add-theme-toggle"
         },
         {
+            "name": "analyze-agent-costs",
+            "source": "meta/analyze-agent-costs"
+        },
+        {
             "name": "azdo-create-pr",
             "source": "integrations/azdo-create-pr"
         },
@@ -72,6 +76,10 @@
         {
             "name": "init-project",
             "source": "project/init-project"
+        },
+        {
+            "name": "langchain-agent-builder",
+            "source": "integrations/langchain-agent-builder"
         },
         {
             "name": "langsmith-clear-feedback",
