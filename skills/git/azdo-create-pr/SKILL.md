@@ -1,161 +1,81 @@
 ---
 name: azdo-create-pr
-description: Use when the user asks to create or open a pull request in an Azure DevOps (Azure Repos / az repos) repository — e.g. "create an AzDo PR", "open a pull request in Azure DevOps", link a work item to a PR, or format an Azure DevOps PR title.
+description: Use when the user asks to create or open a pull request in an Azure DevOps (Azure Repos / az repos) repository — e.g. "create an AzDo PR", "open a pull request in Azure DevOps", "az login", link a work item to a PR, add a PR reviewer, enable auto-complete, or format an Azure DevOps PR title.
 ---
 
 # Azure DevOps Create PR
 
-This skill helps create well-formatted pull requests in Azure DevOps with proper emoji titles and automatic work item linking.
+Create a well-formatted pull request in Azure DevOps with proper emoji titles and automatic work-item linking. Uses the Azure CLI (`az repos pr`), not GitHub CLI (`gh pr`).
 
 ## Prerequisites
 
-- Must be in an Azure DevOps repository (not GitHub)
-- Azure CLI with DevOps extension installed
-- Must be authenticated (`az devops login`)
-- Must have changes committed on a feature branch
+- Azure DevOps repository (not GitHub)
+- Azure CLI with the `azure-devops` extension (`az extension add --name azure-devops`)
+- Authenticated (`az login` then `az devops login`)
+- Changes committed on a feature branch
 
 ## Process
 
-### 1. Verify Current State
+Follow the shared PR recipe in `../_shared/pr-recipe.md` for the common steps (verify state → push → analyze diff → write body). The Azure-DevOps-specific steps are below.
 
-Check that you're ready to create a PR:
-
-```bash
-git status
-git log origin/main..HEAD --oneline
-git diff origin/main...HEAD --stat
-```
-
-Verify:
-- You're on a feature branch (not main)
-- There are commits to include in the PR
-- Changes are committed (working directory is clean)
-
-### 2. Check if Branch is Pushed
-
-```bash
-git branch -vv
-```
-
-If the branch doesn't track a remote or is behind/ahead, push it:
-
-```bash
-git push -u origin <branch-name>
-```
-
-### 3. Gather PR Information
+### 1. Gather PR information
 
 Ask the user if not provided:
 
-**Required:**
-- PR title (use emoji conventional commit format: ✨ feat, 🐛 fix, 📝 docs, etc.)
-- Work item ID to link (ask: "What work item should this PR be linked to?")
+- **PR title** — emoji conventional-commit format (`✨ feat`, `🐛 fix`, `📝 docs`, etc.).
+- **Work item ID** to link — always ask: "What work item should this PR be linked to?" Never assume or skip.
 
-**Optional:**
-- Additional description details beyond the summary
-
-### 4. Analyze Changes
-
-Review the commit history and diff to understand:
-- What changes are included
-- Key features or fixes
-- Files affected
-
-### 5. Create PR with az CLI
-
-Use `az repos pr create` with proper formatting. Build the description in a format like this:
+### 2. Create the PR
 
 ```bash
-az repos pr create --title "✨ Your PR Title" --description "DESCRIPTION_TEXT" --source-branch BRANCH --target-branch main
+az repos pr create \
+  --title "✨ feat(scope): description" \
+  --description "<body with Summary + Test plan>" \
+  --source-branch <branch> \
+  --target-branch main
 ```
 
-Where DESCRIPTION_TEXT follows this structure:
-```
-## Summary
+Set `--auto-complete true` only if the user asks for it.
 
-- Bullet point summary of changes
-- Key features added
-- Important fixes
+### 3. Link the work item
 
-## Test plan
-
-- [ ] Checklist item 1
-- [ ] Checklist item 2
-- [ ] Verify feature X works
-
-```
-
-**Guidelines for PR description:**
-- Start with a clear summary section
-- Use bullet points for readability
-- Include a test plan with checkboxes
-- Focus on the "why" and impact, not just "what" changed
-- Keep it concise but informative
-
-### 6. Link Work Item
-
-After PR is created successfully, link the work item:
+After the PR is created, link the work item. Extract the PR ID from the JSON response (`pullRequestId`):
 
 ```bash
 az repos pr work-item add --id <pr-id> --work-items <work-item-id>
 ```
 
-Extract the PR ID from the JSON response (field: `pullRequestId`)
+### 4. Report the result
 
-### 7. Display Success Message
+Return the PR number, a direct link to the PR, and work-item-linked confirmation. Example shape:
 
-Show the user:
-- ✅ PR created with number
-- 🔗 Direct link to the PR
-- ✅ Work item linked confirmation
-
-Example:
 ```
 ✅ Pull request created successfully!
 
-PR #116837: ✨ Add HTML conversion and improve changelog PR fetching
+PR #<id>: ✨ feat(scope): <title>
 
-🔗 View PR: https://dev.azure.com/org/project/_git/repo/pullrequest/116837
+🔗 View PR: https://dev.azure.com/<org>/<project>/_git/<repo>/pullrequest/<id>
 
-✅ Work item #353253 linked
+✅ Work item #<work-item-id> linked
 ```
-
-## Emoji Conventional Commit Prefixes
-
-Use emoji conventional commit format for PR titles (e.g. `✨ feat(scope): ...`, `🐛 fix(scope): ...`). The full prefix list lives in the `commit` skill's `references/emoji-commits.md` — load it when you need an unusual prefix.
 
 ## Error Handling
 
 **If PR creation fails:**
-- Check if branch is pushed to remote
+- Check if the branch is pushed to remote
 - Verify Azure DevOps authentication
-- Ensure target branch exists
+- Ensure the target branch exists
 - Check for branch policy violations
 
-**If work item linking fails:**
-- Verify work item ID exists
-- Check if user has permissions
-- Confirm work item is in the same project
+**If work-item linking fails:**
+- Verify the work item ID exists
+- Check user permissions
+- Confirm the work item is in the same project
 
-## Important Notes
+## Notes
 
-- **Always ask for work item ID** - don't assume or skip this step
-- **Always link work item** - this is critical for tracking
-- Use Azure CLI (`az repos pr`), not GitHub CLI (`gh pr`)
-- PR title should use emoji conventional commit format
-- Include test plan in PR description
-- Don't push directly to main - always use a feature branch
-
-## Example Flow
-
-```
-User: "Create a PR"
-Claude: "What work item should this PR be linked to?"
-User: "353253"
-Claude:
-  1. Verifies branch state
-  2. Pushes branch if needed
-  3. Creates PR with proper title and description
-  4. Links work item 353253
-  5. Shows success message with PR link
-```
+- Always ask for and link a work item — it's required for AzDo tracking.
+- Use Azure CLI (`az repos pr`), not GitHub CLI (`gh pr`).
+- Include a test plan in the PR description.
+- Never push directly to `main` — always use a feature branch.
+- The full emoji + type prefix list lives in the `commit` skill's `references/emoji-commits.md`.

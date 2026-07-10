@@ -5,8 +5,6 @@ description: Use when the user asks to update or generate a project changelog (C
 
 # Update Changelog
 
-# Update Changelog Command
-
 Generate and maintain project changelog.
 
 ## Instructions
