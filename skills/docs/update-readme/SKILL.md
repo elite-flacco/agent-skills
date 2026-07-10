@@ -1,6 +1,6 @@
 ---
 name: update-readme
-description: Use when the user asks to update README documentation from recent repository changes.
+description: Use when the user asks to update or refresh the README from recent commits/repo changes — e.g. "update the readme", "the readme is out of date", "add the new feature to the readme".
 ---
 
 # Update Readme

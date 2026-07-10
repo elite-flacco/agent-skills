@@ -1,6 +1,6 @@
 ---
 name: openshift-update-app
-description: Update an existing Next.js application deployed on OpenShift by rebuilding and redeploying. Use this skill when the user wants to deploy code changes, rebuild their OpenShift app, update an existing deployment, or mentions "redeploy", "update my app", "rebuild", or "deploy changes to openshift". Also use when troubleshooting issues with existing deployments.
+description: Use when the user wants to deploy code changes to an app already running on OpenShift, or rebuild/redeploy an existing deployment — e.g. "redeploy", "update my app", "rebuild", "deploy changes to openshift". Also use when troubleshooting issues with an existing OpenShift deployment.
 ---
 
 # Update OpenShift Next.js App

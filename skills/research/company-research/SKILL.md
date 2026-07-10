@@ -1,6 +1,6 @@
 ---
 name: company-research
-description: Use when the user asks to perform comprehensive research on a given company for job application purposes.
+description: Use when the user asks to research a company — e.g. "research this company", "tell me about company X", "prepare me for an interview with company X" — for interview prep, sales, partnerships, or investing.
 ---
 
 # Company Research

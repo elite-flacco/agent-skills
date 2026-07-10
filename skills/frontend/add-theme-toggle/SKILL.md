@@ -1,6 +1,6 @@
 ---
 name: add-theme-toggle
-description: Use when the user asks to add theme toggle to next.js using next-themes.
+description: Use when the user asks to add a theme toggle, dark mode, or light/dark color scheme switch to a Next.js app — e.g. "add a dark mode toggle", "add next-themes", "support light/dark theme", "add a color scheme switcher".
 ---
 
 # Add Theme Toggle

@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: Use when the user asks to initialize a new project with the expected baseline files and workflow.
+description: Use when the user asks to initialize or scaffold a new project with baseline files (framework setup, dirs, git, README, CI, tests) — e.g. "initialize a new project", "scaffold a new repo", "set up a new app". For adding lint/format/CI hooks to an existing repo, use project-bootstrap instead.
 ---
 
 # Init Project

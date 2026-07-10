@@ -1,9 +1,9 @@
 ---
 name: save-learning
-description: Use when the user asks to summarize learnings from the conversation and save to /learning.
+description: Use when the user asks to summarize or save learnings/takeaways from the current conversation — e.g. "save what we learned", "write a learning note", "save this to my learnings".
 ---
 
-# Nc Save Learning
+# Save Learning
 
 You are helping the user capture and preserve knowledge from your conversation. Your task is to extract the key learnings, insights, and takeaways and save them to a structured markdown file.
 

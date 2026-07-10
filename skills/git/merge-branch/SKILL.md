@@ -1,6 +1,6 @@
 ---
 name: merge-branch
-description: Use when the user asks to merge the current branch into the main branch.
+description: Use when the user asks to merge the current feature branch into main — e.g. "merge this branch", "merge into main", "ship this branch", or after a PR is approved and ready to land.
 ---
 
 # Merge The Current Branch

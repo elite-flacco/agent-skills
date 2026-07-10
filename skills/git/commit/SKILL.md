@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when the user asks to create a commit.
+description: Use when the user asks to commit staged or modified changes — e.g. "commit this", "create a commit", "make a commit", write a commit message, or split changes into multiple commits.
 ---
 
 # Commit
@@ -113,13 +113,6 @@ Good commit messages:
 - 🧑 chore(tooling): improve developer tooling setup process
 - 🩹 fix(ui): address minor styling inconsistency in header
 - 🚑️ fix(auth): patch critical security vulnerability in auth flow
-- 🎨 style(components): reorganize component structure for better readability
-- 🔥 fix(core): remove deprecated legacy code
-- 🦺 feat(auth): add input validation for user registration form
-- 💚 fix(ci): resolve failing CI pipeline tests
-- 📈 feat(analytics): implement tracking for user engagement
-- 🔒️ fix(auth): strengthen authentication password requirements
-- ♿️ feat(forms): improve accessibility for screen readers
 - 🎨 style(components): reorganize component structure for better readability
 - 🔥 fix(core): remove deprecated legacy code
 - 🦺 feat(auth): add input validation for user registration form

@@ -1,6 +1,6 @@
 ---
 name: html-to-email
-description: Convert an HTML file into email-client-safe HTML. Use when the user provides an HTML file path and wants it transformed into a version that renders correctly across email clients (Outlook desktop/mobile, Gmail desktop/mobile, Apple Mail, Yahoo), or survives copy/paste into Outlook compose. Handles layout conversion to tables, CSS inlining, dark mode support, Outlook conditionals, image fixes, and Outlook paste-safe adjustments. Triggers on requests like "make this email safe", "convert to email HTML", "email-compatible HTML", or "make this safe to paste into Outlook".
+description: Use when the user provides an HTML file and wants it converted into email-client-safe HTML that renders correctly across Outlook (desktop/mobile), Gmail, Apple Mail, and Yahoo — e.g. "make this email safe", "convert to email HTML", "email-compatible HTML", "make this safe to paste into Outlook", or the HTML needs tables, CSS inlining, dark mode, or Outlook conditionals.
 ---
 
 # HTML to Email Converter

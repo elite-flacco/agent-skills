@@ -1,6 +1,6 @@
 ---
 name: frontend-rules
-description: Rules and constraints for all frontend development in Next.js/React/Tailwind projects. INVOKE THIS SKILL before writing or modifying any UI file, component, CSS, or Tailwind class. Also invoke when scaffolding a new frontend project or reviewing existing UI code for compliance.
+description: Use when writing or modifying any UI file, component, CSS, or Tailwind class in a Next.js / React / Tailwind project, before editing UI code, when scaffolding a new frontend project, or when reviewing existing UI code for design-system compliance.
 ---
 
 # Frontend Rules

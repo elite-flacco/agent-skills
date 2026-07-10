@@ -1,6 +1,6 @@
 ---
 name: azdo-create-pr
-description: Use when the user asks to create an Azure DevOps PR, make a pull request in an Azure DevOps repository, or use azdo-create-pr with proper formatting, emoji titles, and work item linking.
+description: Use when the user asks to create or open a pull request in an Azure DevOps (Azure Repos / az repos) repository — e.g. "create an AzDo PR", "open a pull request in Azure DevOps", link a work item to a PR, or format an Azure DevOps PR title.
 ---
 
 # Azure DevOps Create PR

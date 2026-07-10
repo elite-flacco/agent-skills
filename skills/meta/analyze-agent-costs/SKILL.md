@@ -17,12 +17,14 @@ Parse a Claude agent `audit.jsonl` (Claude Code / desktop agent mode / Agent SDK
 
 ## Core Pattern
 
-Run the bundled script — don't re-derive the parsing logic:
+Run the bundled script — don't re-derive the parsing logic. Path is relative to this skill's directory, so resolve the skill dir first (skills are discovered from a flat symlink like `~/.zcode/skills/analyze-agent-costs/`, not the cwd):
 
 ```bash
-python3 scripts/analyze_audit.py <audit.jsonl> -o report.html          # table + HTML report
-python3 scripts/analyze_audit.py <audit.jsonl> --json                  # structured data for widgets
+python3 "$(skill dir of analyze-agent-costs)/scripts/analyze_audit.py" <audit.jsonl> -o report.html          # table + HTML report
+python3 "$(skill dir of analyze-agent-costs)/scripts/analyze_audit.py" <audit.jsonl> --json                  # structured data for widgets
 ```
+
+If the agent can't resolve the skill dir, locate it via its discovery symlink: `readlink -f ~/.zcode/skills/analyze-agent-costs` (or the equivalent under `~/.claude/skills`, `~/.codex/skills`, `~/.pi/agent/skills`).
 
 Use `--json` output as the data source when rendering inline chat visualizations instead of the HTML file.
 

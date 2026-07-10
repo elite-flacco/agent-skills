@@ -1,9 +1,7 @@
 ---
 name: clean-branches
-description: Use when the user asks to clean up local or remote Git branches.
+description: Use when the user asks to clean up, delete, or prune merged or stale git branches — e.g. "clean up branches", "delete merged branches", "remove old branches", "prune remote tracking branches".
 ---
-
-# Clean Branches
 
 # Clean Branches
 
@@ -67,7 +65,8 @@ Follow this systematic approach to clean up git branches.
    git for-each-ref --format='%(committerdate) %(authorname) %(refname)' --sort=committerdate refs/heads
    
    # Find branches older than 30 days
-   git for-each-ref --format='%(refname:short) %(committerdate)' refs/heads | awk '$2 < "'$(date -d '30 days ago' '+%Y-%m-%d')'"'
+   # macOS (BSD date): use -v-30d. Linux (GNU date): use -d '30 days ago'.
+   git for-each-ref --format='%(refname:short) %(committerdate)' refs/heads | awk '$2 < "'$(date -v-30d '+%Y-%m-%d' 2>/dev/null || date -d '30 days ago' '+%Y-%m-%d')'"'
    ```
 
 5. **Interactive Branch Review**

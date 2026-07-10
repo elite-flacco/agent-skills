@@ -1,6 +1,6 @@
 ---
 name: weekly-digest
-description: Use when the user wants to summarize their weekly coding-agent activity, generate a weekly digest, review what they worked on, or use weekly-digest. Covers Claude Code, Codex, Pi, and ZCode sessions.
+description: Use when the user wants to summarize their weekly coding-agent activity or review what they worked on — e.g. "generate a weekly digest", "what did I work on this week", "summarize my week", "weekly review". Covers Claude Code, Codex, Pi, and ZCode sessions.
 ---
 
 # Weekly Digest

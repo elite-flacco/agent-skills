@@ -11,7 +11,7 @@ Create effective, well-structured skills through collaborative interview. Suppor
 
 Create user-authored skills under `skills/<category>/<skill-folder>` in this repository (the agent-skills repo) unless the user explicitly asks for another location.
 
-After creating or renaming a skill, run the link script so all agents (Claude Code, Codex, Pi, ZCode) discover it through their user skill directories:
+After creating or renaming a skill, run the link script from the **agent-skills repo root** so all agents (Claude Code, Codex, Pi, ZCode) discover it through their user skill directories. (These scripts live at the repo root, not inside the skill — run them with cwd at the repo root, e.g. `cd ~/Documents/Projects/agent-skills` first.)
 
 - **macOS:** `./scripts/macos/link.sh`
 - **Windows:** `powershell -ExecutionPolicy Bypass -File .\scripts\link.ps1`
@@ -73,8 +73,8 @@ Read `instructions/authoring-rules.md` for CSO, frontmatter, and writing guideli
 
 - **Simple mode:** Write single SKILL.md using `templates/simple-skill.md`
 - **Structured mode:** Create directories and files. Use `templates/structured-skill.md` for the orchestrator SKILL.md. Read `references/structured-directory-spec.md` for what goes in each directory. If the skill has an eval layer, read `references/eval-layer-guide.md`.
-- Update `manifest.json` (repo root) so the new skill appears in `managedSkills` with a flat discovery `name` and categorized `source`. On commit, the pre-commit hook regenerates this automatically — run `./scripts/macos/sync-manifest.sh` (macOS) or `.\scripts\sync-manifest.ps1` (Windows) to update it manually.
-- Run the link and validate scripts:
+- Update `manifest.json` (repo root) so the new skill appears in `managedSkills` with a flat discovery `name` and categorized `source`. On commit, the pre-commit hook regenerates this automatically — run `./scripts/macos/sync-manifest.sh` (macOS) or `.\scripts\sync-manifest.ps1` (Windows) from the **repo root** to update it manually.
+- Run the link and validate scripts from the **repo root**:
   - **macOS:** `./scripts/macos/link.sh` then `./scripts/macos/validate.sh`
   - **Windows:** `.\scripts\link.ps1` then `.\scripts\validate.ps1`
 

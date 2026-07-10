@@ -1,6 +1,6 @@
 ---
 name: update-changelog
-description: Use when the user asks to update a project changelog from recent repository changes.
+description: Use when the user asks to update or generate a project changelog (CHANGELOG.md) from recent commits/repo changes — e.g. "update the changelog", "add a changelog entry", "what changed since the last release".
 ---
 
 # Update Changelog

@@ -1,11 +1,11 @@
 ---
 name: add-scripts
-description: Use when the user asks to add project scripts.
+description: Use when the user asks to add lint, typecheck, format, or build scripts to a project's package.json — e.g. "add lint and format scripts", "add a typecheck script", "set up npm scripts".
 ---
 
 # Add Scripts
 
-# Add lint, typecheck and format scripts
+Add lint, typecheck, and format scripts to a project.
 
 ## Instructions
 1. Inspect the current project setup and add lint, typecheck, format:check, and format scripts (make sure to include .md files) if missing. 

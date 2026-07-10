@@ -1,6 +1,6 @@
 ---
 name: create-pr
-description: Use when the user asks to create a github pull request.
+description: Use when the user asks to create or open a GitHub pull request — e.g. "create a PR", "open a pull request", "make a PR", or push a branch and open it for review.
 ---
 
 # Create Pull Request

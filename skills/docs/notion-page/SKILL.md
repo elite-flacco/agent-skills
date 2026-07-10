@@ -1,6 +1,6 @@
 ---
 name: notion-page
-description: Use when the user asks to create or update a Notion page, write formatted content into Notion, add Notion blocks (toggles, callouts, tables, columns, mentions, media), or persist research/docs to a Notion database.
+description: Use when the user asks to create or update a Notion page, write formatted content into Notion, add Notion blocks (toggles, callouts, tables, columns, mentions, media), or save research/notes to a Notion database — e.g. "add this to Notion", "create a Notion page", "write this into Notion".
 ---
 
 # Create Notion Page

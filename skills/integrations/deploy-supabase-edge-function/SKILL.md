@@ -1,6 +1,6 @@
 ---
 name: deploy-supabase-edge-function
-description: Use when the user asks to deploy edge function to supabase.
+description: Use when the user asks to deploy a Supabase edge function (Deno) to a remote project — e.g. "deploy this edge function", "push the supabase function", "deploy to supabase". Not for local `supabase functions serve`.
 ---
 
 # Deploy Supabase Edge Function

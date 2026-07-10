@@ -1,15 +1,13 @@
 ---
 name: people-research
-description: Use when the user asks to perform comprehensive research on a given person to prepare for an interview.
+description: Use when the user asks to research a person — e.g. "research my interviewer", "look up this person", "prepare me for an interview with X" — to prepare for a conversation, interview, or meeting.
 ---
-
-# Nc People Research
 
 # Perform People Research
 
 ## Instructions
 1. Identify the interviewer and link to the job description using Notion MCP (ask the user for the relevant Notion page if not provided).
-1. Perform comprehensive research on the interviewer to help user prepare for the interview. Return the findings in the following format: -
+2. Perform comprehensive research on the interviewer to help user prepare for the interview. Return the findings in the following format: -
 
 ```markdown
 ## 1. Quick Snapshot (3–5 bullets)

@@ -1,6 +1,6 @@
 ---
 name: add-gh-workflows
-description: Use when the user asks to set up github workflows.
+description: Use when the user asks to set up GitHub Actions workflows / CI for a repo — e.g. "add CI", "set up GitHub workflows", "add GitHub Actions", "configure continuous integration".
 ---
 
 # Add GitHub Workflows

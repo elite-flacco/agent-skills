@@ -1,9 +1,7 @@
 ---
 name: show-prs
-description: Use when the user asks to show open pull requests.
+description: Use when the user asks to list, show, or review open pull requests — e.g. "show my PRs", "what PRs are open", "list pull requests", "show open PRs across my repos".
 ---
-
-# Show Prs
 
 # Show Open Pull Requests
 

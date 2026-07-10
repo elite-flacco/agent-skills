@@ -1,6 +1,6 @@
 ---
 name: setup-design-system
-description: Use when the user asks to set up a Tailwind (v3) design system with CSS-variable tokens, dark mode, and component classes.
+description: Use when the user asks to set up a Tailwind v3 design system with CSS-variable tokens, dark mode, and component classes — e.g. "set up the design system", "add design tokens", "configure dark mode" in a Tailwind v3 project. For Tailwind v4, use setup-design-system-tw instead.
 ---
 
 # Set Up Tailwind Design System

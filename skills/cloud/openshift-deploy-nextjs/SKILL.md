@@ -1,6 +1,6 @@
 ---
 name: openshift-deploy-nextjs
-description: Deploy a Next.js application to OpenShift from scratch. Use this skill when the user wants to deploy a new Next.js app to OpenShift, mentions "deploy to openshift", "ocp deployment", needs help with OpenShift builds, or wants to get their Next.js app running in a Kubernetes/OpenShift cluster. Also trigger for troubleshooting OpenShift deployment issues like BuildPodEvicted, route problems, or proxy configuration.
+description: Use when the user wants to deploy a new Next.js app to OpenShift / OCP from scratch — e.g. "deploy to openshift", "ocp deployment", "get my Next.js app running on OpenShift", or needs help with OpenShift builds. Also use when troubleshooting fresh deployment issues like BuildPodEvicted, route problems, or proxy configuration.
 ---
 
 # Deploy Next.js to OpenShift
