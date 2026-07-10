@@ -174,39 +174,11 @@ Tell the user:
 - ✅ New pod running: <pod-name>
 - ✅ App accessible at: <URL>
 
-## Quick Troubleshooting
+## Troubleshooting
 
-If something went wrong, here are fast fixes:
+For rollback, force restart, deployment history, scaling, and diagnosing app-not-loading / proxy / TLS issues, see the shared reference in the `openshift-deploy-nextjs` skill: `references/troubleshooting.md`. Those commands (e.g. `oc rollout undo`, `oc rollout restart`, `oc get all -l app=...`) apply identically here.
 
-### Rollback to previous version
-```bash
-oc rollout undo deployment/<app-name>
-oc get pods -l deployment=<app-name> -w
-```
-
-### Force restart (without rebuilding)
-```bash
-oc rollout restart deployment/<app-name>
-```
-
-### Check deployment history
-```bash
-oc rollout history deployment/<app-name>
-```
-
-### View all resources
-```bash
-oc get all -l app=<app-name>
-```
-
-### Scale replicas if needed
-```bash
-oc scale deployment/<app-name> --replicas=<N>
-```
-
-## When Updates Aren't Enough
-
-If you're seeing persistent issues or need to change configuration (env vars, resources, etc.), you might need to do more than just rebuild:
+Two update-specific config changes that don't require a full redeploy:
 
 **Environment variables changed:**
 ```bash
@@ -220,5 +192,5 @@ oc set resources deployment/<app-name> --limits=cpu=2,memory=1Gi --requests=cpu=
 ```
 
 **Major changes (Dockerfile, build strategy, etc.):**
-- Use `openshift-deploy-nextjs` skill to redo the full deployment, or
+- Use the `openshift-deploy-nextjs` skill to redo the full deployment, or
 - Manually delete and recreate: `oc delete all -l app=<app-name>` then redeploy

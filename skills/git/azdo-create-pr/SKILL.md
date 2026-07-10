@@ -122,20 +122,7 @@ PR #116837: ✨ Add HTML conversion and improve changelog PR fetching
 
 ## Emoji Conventional Commit Prefixes
 
-Use these for PR titles:
-
-- ✨ `feat`: New feature
-- 🐛 `fix`: Bug fix
-- 📝 `docs`: Documentation changes
-- 🔧 `chore`: Tooling, configuration
-- ♻️ `refactor`: Code refactoring
-- ⚡️ `perf`: Performance improvements
-- ✅ `test`: Tests
-- 🚀 `ci`: CI/CD improvements
-- 🎨 `style`: Code formatting/structure
-- 💚 `fix`: Fix CI build
-- 🔒️ `fix`: Security fix
-- 🚑️ `fix`: Critical hotfix
+Use emoji conventional commit format for PR titles (e.g. `✨ feat(scope): ...`, `🐛 fix(scope): ...`). The full prefix list lives in the `commit` skill's `references/emoji-commits.md` — load it when you need an unusual prefix.
 
 ## Error Handling
 
