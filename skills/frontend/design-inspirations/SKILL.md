@@ -1,6 +1,6 @@
 ---
 name: design-inspirations
-description: Use when the user wants multiple visual variations of a UI (e.g. landing page, dashboard, button) to explore different design directions — e.g. asks for "design variations", "alternatives", "explore styles", "a few takes on", or wants variations side-by-side in the browser.
+description: Use when the user wants multiple visual variations of a UI (e.g. landing page, dashboard, button) to explore different design directions — e.g. asks for "design variations", "alternatives", "explore styles", "a few takes on", "redesign", "mockups", "show me options", or wants variations side-by-side in the browser.
 ---
 
 # Design Inspirations
@@ -26,7 +26,7 @@ Create different visual variations of UI components (e.g. landing page, dashboar
    - app/variants/v10/page.tsx
 5) Each variant should differ meaningfully in style/layout/content. Push diversity:
    - copy
-   - overall aethestics
+   - overall aesthetics
    - typography scale + hierarchy
    - spacing + grid system
    - hero treatment (image/illustration placeholder ok)
