@@ -5,12 +5,13 @@ description: Use when the user asks to add a theme toggle, dark mode, or light/d
 
 # Add Theme Toggle
 
-Add dark mode / theme toggle functionality to Next.js applications using next-themes. Always add the button to the app header. If not applicable, ask the user how they want to proceed.
+Add a dark mode / theme toggle to a Next.js app using `next-themes`. Adds a toggle (dropdown or simple two-state button) that can be placed in the app header or wherever the user wants. If the user doesn't specify which style, default to the dropdown (it exposes the System option); use the simple button when they want a minimal sun/moon switch.
 
 ## Prerequisites
 
 - Next.js 13+ with App Router (recommended) or Pages Router
 - Tailwind CSS configured with `darkMode: 'class'`
+- shadcn/ui (the toggle below uses `Button` and `DropdownMenu` from `@/components/ui/...`). If the project doesn't use shadcn/ui, either install the components you need or replace them with plain elements. Confirm with the user before introducing a new UI dependency.
 
 ## Installation
 
@@ -18,9 +19,9 @@ Add dark mode / theme toggle functionality to Next.js applications using next-th
 npm install next-themes
 ```
 
-## Implementation Steps
+## Implementation
 
-### 1. Create ThemeProvider Wrapper Component
+### 1. ThemeProvider wrapper
 
 Create `components/theme-provider.tsx`:
 
@@ -38,9 +39,9 @@ export function ThemeProvider({
 }
 ```
 
-### 2. Wrap Application with ThemeProvider
+### 2. Wrap the app
 
-Update `app/layout.tsx`:
+Update `app/layout.tsx`. The `suppressHydrationWarning` on `<html>` is **required** — `next-themes` sets the class before hydration and React will warn without it.
 
 ```tsx
 import { ThemeProvider } from "@/components/theme-provider";
@@ -67,11 +68,9 @@ export default function RootLayout({
 }
 ```
 
-### 3. Create Theme Toggle Component
+### 3. Theme toggle component
 
-Do this if the user asked for `add-theme-toggle --dropdown`, otherwise use the single button option below.
-
-Create `components/theme-toggle.tsx`:
+Create `components/theme-toggle.tsx`. This is the dropdown variant (Light / Dark / System). Place it in the header or wherever the user requests.
 
 ```tsx
 "use client";
@@ -101,22 +100,18 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 ```
 
-### 4. Alternative: Simple Toggle Button (No Dropdown)
+### 4. Alternative: simple toggle button
+
+A minimal two-state toggle (just flips between light and dark, no menu). Use this when the user wants a sun/moon icon button rather than a dropdown. Note it guards on `mounted` because it reads `theme` to render conditional icons — see `references/next-themes-api.md` on the hydration pattern.
 
 ```tsx
 "use client";
@@ -160,102 +155,17 @@ export function ThemeToggle() {
 }
 ```
 
-## Tailwind CSS Configuration
+### 5. Tailwind configuration
 
-Ensure `tailwind.config.ts` has dark mode enabled:
+For Tailwind v3, set `darkMode: "class"` in `tailwind.config.ts`.
 
-```ts
-import type { Config } from "tailwindcss";
-
-const config: Config = {
-  darkMode: "class",
-  // ... rest of config
-};
-
-export default config;
-```
-
-For Tailwind v4, add to your CSS file:
+For Tailwind v4, add to your CSS:
 
 ```css
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
-## ThemeProvider Props Reference
+## Going Further
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `attribute` | `string` | `"data-theme"` | HTML attribute to set (`"class"` for Tailwind) |
-| `defaultTheme` | `string` | `"system"` | Default theme (`"light"`, `"dark"`, `"system"`) |
-| `enableSystem` | `boolean` | `true` | Enable system preference detection |
-| `disableTransitionOnChange` | `boolean` | `false` | Disable CSS transitions on theme change |
-| `storageKey` | `string` | `"theme"` | localStorage key for persisting theme |
-| `themes` | `string[]` | `["light", "dark"]` | List of available themes |
-| `forcedTheme` | `string` | - | Force a specific theme (disables switching) |
-
-## useTheme Hook Reference
-
-```tsx
-const {
-  theme,          // Current theme name
-  setTheme,       // Function to set theme
-  resolvedTheme,  // Actual rendered theme (useful when theme is "system")
-  systemTheme,    // System preference ("light" or "dark")
-  themes,         // List of available themes
-  forcedTheme,    // Forced theme if set
-} = useTheme();
-```
-
-## Handling Hydration Mismatch
-
-Always handle the mounted state to avoid hydration mismatches:
-
-```tsx
-const [mounted, setMounted] = React.useState(false);
-
-React.useEffect(() => {
-  setMounted(true);
-}, []);
-
-if (!mounted) {
-  return null; // or a skeleton/placeholder
-}
-```
-
-## Custom Themes Example
-
-```tsx
-<ThemeProvider
-  attribute="data-theme"
-  defaultTheme="blue"
-  themes={["light", "dark", "blue", "purple"]}
-  value={{
-    light: "light",
-    dark: "dark",
-    blue: "theme-blue",
-    purple: "theme-purple",
-  }}
->
-```
-
-With corresponding CSS:
-
-```css
-[data-theme="theme-blue"] {
-  --background: 210 100% 12%;
-  --foreground: 210 100% 98%;
-}
-
-[data-theme="theme-purple"] {
-  --background: 270 100% 12%;
-  --foreground: 270 100% 98%;
-}
-```
-
-## Notes
-
-- The `suppressHydrationWarning` on `<html>` is required to prevent React hydration warnings
-- Use `resolvedTheme` instead of `theme` when you need the actual rendered theme (important when using "system")
-- The theme is persisted in localStorage by default
-- Icons require `lucide-react`: `npm install lucide-react`
+For the full `ThemeProvider` props table, the `useTheme` hook API, custom multi-theme setups (e.g. light/dark/blue/purple), and the hydration/`mounted` pattern for components that read `resolvedTheme`, see `references/next-themes-api.md`.
