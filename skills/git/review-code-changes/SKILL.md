@@ -7,9 +7,7 @@ description: Use when the user asks for holistic code review, branch review, sta
 
 ## Overview
 
-Review existing branch or staged changes like a senior engineer seeing the diff for the first time. Start from the code and runtime behavior, not from prior memory, docs, comments, or the author's stated intent; use those only later as comparison points.
-
-The goal is not to fix the code unless explicitly asked. The goal is to surface the highest-value risks, explain them plainly, and identify the evidence needed to trust or change the work.
+Review a branch or staged changes like a senior engineer seeing the diff for the first time: start from the code and runtime behavior, not from prior memory, docs, comments, or the author's stated intent; use those only later as comparison points. Surface the highest-value risks, explain them plainly, and identify the evidence needed to trust or change the work.
 
 ## When to Use
 
@@ -33,13 +31,7 @@ The goal is not to fix the code unless explicitly asked. The goal is to surface 
    - Treat comments, README claims, issue text, prior memory, and commit messages as untrusted context until the code path supports them.
    - Ask: what problem does this change appear to solve, what invariants must hold, and what could break if those invariants are wrong?
 
-3. Review the change through the required lenses.
-   - Functional behavior: infer the intended workflow from the code path, then verify inputs, outputs, data transformations, validation, state transitions, side effects, failure paths, regressions, backwards compatibility, and whether the change solves the real problem.
-   - Architecture/design: check ownership boundaries, abstractions, coupling, data flow, implicit ordering, global side effects, persistence, migrations, feature flags, rollback behavior, and whether a simpler design would work.
-   - Implementation quality: inspect naming, readability, type safety, validation, duplication, dead code, stale comments, cleanup, logging, observability, performance, accessibility, security, and brittle string/date handling.
-   - Third-party usage: for new, upgraded, unfamiliar, or behavior-critical packages, SDKs, framework APIs, CLIs, config options, or generated types, verify against official version-specific docs, changelogs, migration guides, API references, release notes, typed declarations, or package source.
-   - Tests: identify changed behavior and check whether success, failure, boundary, regression, integration, and UI states are covered; recommend only tests that reduce real risk.
-   - Operations: check config, environment variables, secrets, rate limits, auth requirements, runtime support, deploy safety, monitoring, and rollback concerns when relevant.
+3. Review the change through the required lenses in [references/review-lenses.md](references/review-lenses.md) — functional behavior, architecture/design, implementation quality, third-party usage, tests, and operations. Not every lens applies to every diff, but skip a lens deliberately, not by accident.
 
 4. Run targeted verification.
    - Prefer project scripts from `package.json`, `pyproject.toml`, `Makefile`, `justfile`, CI config, or existing docs over invented commands.

@@ -1,0 +1,11 @@
+<!-- BAD spacer row — the "white banded rows" failure.
+     font-size:0; line-height:0 collapses unpredictably in Outlook's Word
+     paste engine, which often injects a default white background. Result:
+     visible white bands between cards in light mode, and worse contrast in
+     dark mode where the white bands stand out against the dark compose
+     canvas.
+
+     Do NOT do this. See good-spacer-row.html for the correct pattern. -->
+<tr>
+  <td style="height:8px; font-size:0; line-height:0;">&nbsp;</td>
+</tr>
