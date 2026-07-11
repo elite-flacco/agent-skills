@@ -65,17 +65,41 @@ function Get-SkillSource($Skill) {
     return Join-Path 'skills' $Skill.source
 }
 
+function Remove-StaleLinks([string]$Root, [System.Collections.Generic.HashSet[string]]$ManagedNames) {
+    $SkillsRoot = Join-Path $SourceRoot 'skills'
+    foreach ($Item in Get-ChildItem -LiteralPath $Root -Force) {
+        if ($ManagedNames.Contains($Item.Name)) {
+            continue
+        }
+        if ($Item.LinkType -ne 'Junction') {
+            continue
+        }
+        $Target = @($Item.Target) -join ''
+        if ($Target -eq $SkillsRoot -or $Target.StartsWith($SkillsRoot + [IO.Path]::DirectorySeparatorChar)) {
+            $Item.Delete()
+            Write-Host "Pruned stale link $($Item.FullName) -> $Target"
+        }
+    }
+}
+
 $ClaudeSkills = Join-Path $env:USERPROFILE '.claude\skills'
 $CodexSkills = Join-Path $env:USERPROFILE '.codex\skills'
+$PiSkills = Join-Path $env:USERPROFILE '.pi\agent\skills'
 $ZcodeSkills = Join-Path $env:USERPROFILE '.zcode\skills'
-Ensure-Directory $ClaudeSkills
-Ensure-Directory $CodexSkills
-Ensure-Directory $ZcodeSkills
+$ManagedNames = [System.Collections.Generic.HashSet[string]]::new()
+foreach ($Skill in $Manifest.managedSkills) {
+    $ManagedNames.Add((Get-SkillName $Skill)) | Out-Null
+}
+foreach ($Root in @($ClaudeSkills, $CodexSkills, $PiSkills, $ZcodeSkills)) {
+    Ensure-Directory $Root
+    Remove-StaleLinks $Root $ManagedNames
+}
 
 foreach ($Skill in $Manifest.managedSkills) {
     $SkillName = Get-SkillName $Skill
     $TargetPath = Join-Path $SourceRoot (Get-SkillSource $Skill)
     Ensure-Junction (Join-Path $ClaudeSkills $SkillName) $TargetPath 'claude-skills'
     Ensure-Junction (Join-Path $CodexSkills $SkillName) $TargetPath 'codex-skills'
+    Ensure-Junction (Join-Path $PiSkills $SkillName) $TargetPath 'pi-skills'
     Ensure-Junction (Join-Path $ZcodeSkills $SkillName) $TargetPath 'zcode-skills'
 }

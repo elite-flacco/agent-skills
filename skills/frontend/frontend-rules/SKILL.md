@@ -90,6 +90,18 @@ FRONTEND DESIGN SYSTEM — follow these exactly:
 
 In the subagent's prompt, instruct it to read `globals.css` first (that file IS the design system), then paste sections 2–10 above as the rules it must follow.
 
+## 12. Visual Verification
+
+After making UI changes:
+
+1. Open the affected route in a browser and confirm the requested change is visibly rendered.
+2. Check desktop and mobile viewport widths, including nearby layout, wrapping, overflow, and scrolling.
+3. Exercise changed interactions and relevant states such as hover, focus, loading, empty, error, and disabled states.
+4. Check the browser console for errors introduced by the change.
+5. Compare the rendered result with the user's acceptance criteria and iterate until it satisfies them.
+
+Prefer the in-app browser for visual inspection. Use Agent Browser when repeatable navigation or interaction checks are useful. If the app cannot run, report the blocker and clearly distinguish code-only checks from completed visual verification.
+
 ## Quick Self-Check Before Committing
 
 - [ ] No `text-{color}-{shade}` or `bg-{color}-{shade}` from Tailwind's default palette
@@ -102,3 +114,5 @@ In the subagent's prompt, instruct it to read `globals.css` first (that file IS 
 - [ ] `btn` only used on action buttons, not nav items or card containers
 - [ ] Repeated patterns extracted to `@layer components`
 - [ ] TypeScript throughout
+- [ ] Changed UI verified in the browser at desktop and mobile widths
+- [ ] Relevant interactions and states work without new console errors

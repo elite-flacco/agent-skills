@@ -8,6 +8,8 @@ $ManifestPath = Join-Path $SourceRoot 'manifest.json'
 $Manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
 $ClaudeSkills = Join-Path $env:USERPROFILE '.claude\skills'
 $CodexSkills = Join-Path $env:USERPROFILE '.codex\skills'
+$PiSkills = Join-Path $env:USERPROFILE '.pi\agent\skills'
+$ZcodeSkills = Join-Path $env:USERPROFILE '.zcode\skills'
 $Failures = New-Object System.Collections.Generic.List[string]
 
 function Test-Mojibake([string]$Text) {
@@ -62,7 +64,7 @@ foreach ($Skill in $Manifest.managedSkills) {
         }
     }
 
-    foreach ($Root in @($ClaudeSkills, $CodexSkills)) {
+    foreach ($Root in @($ClaudeSkills, $CodexSkills, $PiSkills, $ZcodeSkills)) {
         $LinkPath = Join-Path $Root $SkillName
         if (-not (Test-Path -LiteralPath $LinkPath)) {
             $Failures.Add("Missing discovery link: $LinkPath")

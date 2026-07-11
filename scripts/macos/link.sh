@@ -64,14 +64,38 @@ function ensureSymlink(linkPath, targetPath, backupCategory) {
   console.log(`Linked ${linkPath} -> ${targetPath}`);
 }
 
+function pruneStaleLinks(root) {
+  const skillsRoot = path.join(sourceRoot, 'skills');
+  const managedNames = new Set(manifest.managedSkills.map((skill) => skill.name));
+
+  for (const entry of fs.readdirSync(root)) {
+    if (managedNames.has(entry)) continue;
+    const linkPath = path.join(root, entry);
+    let stat = null;
+    try {
+      stat = fs.lstatSync(linkPath);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      continue;
+    }
+    if (!stat.isSymbolicLink()) continue;
+    const rawTarget = path.resolve(root, fs.readlinkSync(linkPath));
+    if (rawTarget === skillsRoot || rawTarget.startsWith(skillsRoot + path.sep)) {
+      fs.unlinkSync(linkPath);
+      console.log(`Pruned stale link ${linkPath} -> ${rawTarget}`);
+    }
+  }
+}
+
 const claudeSkills = path.join(os.homedir(), '.claude', 'skills');
 const codexSkills = path.join(os.homedir(), '.codex', 'skills');
 const piSkills = path.join(os.homedir(), '.pi', 'agent', 'skills');
 const zcodeSkills = path.join(os.homedir(), '.zcode', 'skills');
-ensureDir(claudeSkills);
-ensureDir(codexSkills);
-ensureDir(piSkills);
-ensureDir(zcodeSkills);
+const skillRoots = [claudeSkills, codexSkills, piSkills, zcodeSkills];
+for (const root of skillRoots) {
+  ensureDir(root);
+  pruneStaleLinks(root);
+}
 
 for (const skill of manifest.managedSkills) {
   const targetPath = path.join(sourceRoot, 'skills', skill.source);

@@ -50,10 +50,6 @@
             "source": "integrations/deploy-supabase-edge-function"
         },
         {
-            "name": "design-mode",
-            "source": "frontend/design-mode"
-        },
-        {
             "name": "explain-technical-issue",
             "source": "meta/explain-technical-issue"
         },

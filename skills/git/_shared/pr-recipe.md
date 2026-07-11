@@ -33,6 +33,11 @@ Read the commit log and diff against the base branch to understand what's in the
 PR — what changed, key features/fixes, and which files are affected. This feeds
 the PR body.
 
+While reviewing the diff, check whether any documentation should be updated as part
+of this PR — e.g. `README.md`, `AGENTS.md`, `CLAUDE.md`. If the change affects setup,
+usage, or conventions described there, update the relevant file(s) in the same PR
+before opening it.
+
 ## 4. Write the PR body
 
 Structure the body as **Summary** + **Test plan**:

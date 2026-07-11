@@ -40,7 +40,7 @@ describe('macOS setup scripts', () => {
     assert.equal(fs.existsSync(path.join(repoRoot, 'scripts', 'check.ps1')), true);
   });
 
-  it('links every managed skill into Claude and Codex discovery folders', () => {
+  it('links every managed skill into all agent discovery folders', () => {
     const home = tempHome();
     const output = run('bash', ['scripts/macos/link.sh'], {
       env: { ...process.env, HOME: home },
@@ -49,7 +49,7 @@ describe('macOS setup scripts', () => {
 
     assert.match(output, new RegExp(`Linked ${manifest.managedSkills.length} skills`));
     for (const skill of manifest.managedSkills) {
-      for (const root of ['.claude/skills', '.codex/skills']) {
+      for (const root of ['.claude/skills', '.codex/skills', '.pi/agent/skills', '.zcode/skills']) {
         const linkPath = path.join(home, root, skill.name);
         assert.equal(fs.lstatSync(linkPath).isSymbolicLink(), true, `${linkPath} should be a symlink`);
         assert.equal(
@@ -58,6 +58,28 @@ describe('macOS setup scripts', () => {
         );
       }
     }
+  });
+
+  it('prunes stale links into this repo but leaves foreign entries alone', () => {
+    const home = tempHome();
+    const claudeSkills = path.join(home, '.claude', 'skills');
+    fs.mkdirSync(claudeSkills, { recursive: true });
+
+    const staleLink = path.join(claudeSkills, 'renamed-away-skill');
+    fs.symlinkSync(path.join(repoRoot, 'skills', 'no-longer-exists'), staleLink, 'dir');
+    const foreignLink = path.join(claudeSkills, 'foreign-skill');
+    fs.symlinkSync(os.tmpdir(), foreignLink, 'dir');
+    const plainDir = path.join(claudeSkills, 'plain-dir-skill');
+    fs.mkdirSync(plainDir);
+
+    const output = run('bash', ['scripts/macos/link.sh'], {
+      env: { ...process.env, HOME: home },
+    });
+
+    assert.match(output, /Pruned stale link .*renamed-away-skill/);
+    assert.throws(() => fs.lstatSync(staleLink), { code: 'ENOENT' }, 'stale repo link should be removed');
+    assert.equal(fs.lstatSync(foreignLink).isSymbolicLink(), true, 'foreign link should survive');
+    assert.equal(fs.statSync(plainDir).isDirectory(), true, 'plain directory should survive');
   });
 
   it('validates linked skills and manifest skill metadata without rewriting sourceRoot', () => {
@@ -95,7 +117,7 @@ describe('macOS setup scripts', () => {
     }
   });
 
-  it('installs a separate macOS hooks path', () => {
+  it('installs the shared hooks path', () => {
     const tmpRepo = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-skills-repo-'));
     fs.cpSync(repoRoot, tmpRepo, {
       recursive: true,
@@ -112,7 +134,7 @@ describe('macOS setup scripts', () => {
       encoding: 'utf8',
     }).trim();
 
-    assert.match(output, /Configured Git hooks path: \.githooks-macos/);
-    assert.equal(hooksPath, '.githooks-macos');
+    assert.match(output, /Configured Git hooks path: \.githooks/);
+    assert.equal(hooksPath, '.githooks');
   });
 });

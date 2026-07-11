@@ -27,6 +27,8 @@ const manifest = JSON.parse(fs.readFileSync(path.join(sourceRoot, 'manifest.json
 const failures = [];
 const claudeSkills = path.join(os.homedir(), '.claude', 'skills');
 const codexSkills = path.join(os.homedir(), '.codex', 'skills');
+const piSkills = path.join(os.homedir(), '.pi', 'agent', 'skills');
+const zcodeSkills = path.join(os.homedir(), '.zcode', 'skills');
 
 function hasMojibake(text) {
   for (const char of text) {
@@ -58,7 +60,7 @@ for (const skill of manifest.managedSkills) {
     }
   }
 
-  for (const root of [claudeSkills, codexSkills]) {
+  for (const root of [claudeSkills, codexSkills, piSkills, zcodeSkills]) {
     const linkPath = path.join(root, skill.name);
     let stat = null;
     try {
