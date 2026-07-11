@@ -39,23 +39,22 @@ const existingManifest = fs.existsSync(manifestPath)
   ? JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
   : {};
 
-function findSkillFiles(dir) {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...findSkillFiles(fullPath));
-    if (entry.isFile() && entry.name === 'SKILL.md') files.push(fullPath);
-  }
-  return files;
-}
+// Derive managed skills from the git index (staged/committed tree), not the raw
+// filesystem, so untracked or unstaged skill directories never leak into the
+// manifest -- and never get swept into an unrelated commit.
+const { execFileSync } = require('node:child_process');
+const trackedSkillFiles = execFileSync('git', ['-C', sourceRoot, 'ls-files', '-z', '--', 'skills'], {
+  encoding: 'utf8',
+})
+  .split('\0')
+  .filter((relPath) => relPath.endsWith('/SKILL.md'));
 
-const managedSkills = findSkillFiles(skillsRoot)
-  .map((skillFile) => {
-    const skillDir = path.dirname(skillFile);
+const managedSkills = trackedSkillFiles
+  .map((relPath) => {
+    const skillDir = path.dirname(relPath);
     return {
       name: path.basename(skillDir),
-      source: path.relative(skillsRoot, skillDir).split(path.sep).join('/'),
+      source: path.relative('skills', skillDir).split(path.sep).join('/'),
     };
   })
   .sort((a, b) => a.name.localeCompare(b.name));

@@ -12,11 +12,20 @@ if (-not (Test-Path -LiteralPath $SkillsRoot)) {
     throw "Missing skills directory: $SkillsRoot"
 }
 
-$SkillRootWithSeparator = $SkillsRoot.TrimEnd('\') + '\'
-$ManagedSkills = Get-ChildItem -LiteralPath $SkillsRoot -Recurse -Filter 'SKILL.md' -File |
+# Derive managed skills from the git index (staged/committed tree), not the raw
+# filesystem, so untracked or unstaged skill directories never leak into the
+# manifest -- and never get swept into an unrelated commit.
+$TrackedSkillFiles = & git -C $SourceRoot ls-files -- skills
+if ($LASTEXITCODE -ne 0) {
+    throw "git ls-files failed with exit code $LASTEXITCODE."
+}
+
+$ManagedSkills = $TrackedSkillFiles |
+    Where-Object { $_ -match '/SKILL\.md$' } |
     ForEach-Object {
-        $SkillDirectory = Split-Path -Parent $_.FullName
-        $RelativeSource = $SkillDirectory.Substring($SkillRootWithSeparator.Length).Replace('\', '/')
+        $RelativePath = $_.Replace('/', [IO.Path]::DirectorySeparatorChar)
+        $SkillDirectory = Split-Path -Parent $RelativePath
+        $RelativeSource = $SkillDirectory.Substring('skills'.Length + 1).Replace('\', '/')
         $Name = Split-Path -Leaf $SkillDirectory
 
         [pscustomobject][ordered]@{

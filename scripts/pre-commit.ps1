@@ -13,9 +13,6 @@ function Invoke-Git([string[]]$Arguments) {
 
 $ManifestPath = Join-Path $SourceRoot 'manifest.json'
 
-Write-Host "Staging skill file changes..."
-Invoke-Git @('-C', $SourceRoot, 'add', '--', 'skills')
-
 Write-Host "Syncing skill manifest..."
 & (Join-Path $PSScriptRoot 'sync-manifest.ps1') -SourceRoot $SourceRoot
 
