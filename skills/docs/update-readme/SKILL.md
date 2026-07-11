@@ -27,7 +27,7 @@ Review changes since the last README update and refresh `README.md` to reflect t
    ```bash
    npm run format
    ```
-6. **If the user asks to open a PR**, create a branch, commit the README change, and open a PR (use the `create-pr` skill).
+6. **If the user asks to open a PR**, create a branch, commit the README change, and open a PR (use the `create-github-pr` skill).
 
 ## Notes
 - Only edit `README.md` content that is now inaccurate — avoid churn.

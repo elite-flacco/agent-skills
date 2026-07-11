@@ -1,9 +1,9 @@
 ---
-name: add-gh-workflows
+name: add-github-actions
 description: Use when the user asks to set up GitHub Actions workflows / CI for a repo — e.g. "add CI", "set up GitHub workflows", "add GitHub Actions", "configure continuous integration".
 ---
 
-# Add GitHub Workflows
+# Add GitHub Actions
 
 Set up GitHub Actions workflows for a repo by copying the defaults from `~/.claude/github/`.
 

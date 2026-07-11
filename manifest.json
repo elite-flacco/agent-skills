@@ -2,8 +2,8 @@
     "sourceRoot": "C:\\Users\\shuan\\Documents\\Projects\\personal-agent-skills",
     "managedSkills": [
         {
-            "name": "add-gh-workflows",
-            "source": "git/add-gh-workflows"
+            "name": "add-github-actions",
+            "source": "git/add-github-actions"
         },
         {
             "name": "add-scripts",
@@ -18,8 +18,8 @@
             "source": "meta/analyze-agent-costs"
         },
         {
-            "name": "azdo-create-pr",
-            "source": "git/azdo-create-pr"
+            "name": "azure-devops-create-pr",
+            "source": "git/azure-devops-create-pr"
         },
         {
             "name": "clean-branches",
@@ -34,8 +34,8 @@
             "source": "research/company-research"
         },
         {
-            "name": "create-pr",
-            "source": "git/create-pr"
+            "name": "create-github-pr",
+            "source": "git/create-github-pr"
         },
         {
             "name": "create-worktree",
@@ -50,16 +50,16 @@
             "source": "integrations/deploy-supabase-edge-function"
         },
         {
-            "name": "design-inspirations",
-            "source": "frontend/design-inspirations"
-        },
-        {
             "name": "design-mode",
             "source": "frontend/design-mode"
         },
         {
-            "name": "explain-to-me",
-            "source": "meta/explain-to-me"
+            "name": "explain-technical-issue",
+            "source": "meta/explain-technical-issue"
+        },
+        {
+            "name": "explore-design-variations",
+            "source": "frontend/explore-design-variations"
         },
         {
             "name": "fluid-typography",
@@ -86,12 +86,16 @@
             "source": "integrations/langsmith-clear-feedback"
         },
         {
+            "name": "list-github-prs",
+            "source": "git/list-github-prs"
+        },
+        {
             "name": "merge-branch",
             "source": "git/merge-branch"
         },
         {
             "name": "notion-page",
-            "source": "docs/notion-page"
+            "source": "integrations/notion-page"
         },
         {
             "name": "openshift-deploy-nextjs",
@@ -102,8 +106,8 @@
             "source": "cloud/openshift-update-app"
         },
         {
-            "name": "people-research",
-            "source": "research/people-research"
+            "name": "person-research",
+            "source": "research/person-research"
         },
         {
             "name": "project-bootstrap",
@@ -119,15 +123,11 @@
         },
         {
             "name": "save-learning",
-            "source": "research/save-learning"
+            "source": "meta/save-learning"
         },
         {
-            "name": "setup-design-system-tw",
-            "source": "frontend/setup-design-system-tw"
-        },
-        {
-            "name": "show-prs",
-            "source": "git/show-prs"
+            "name": "setup-tailwind-design-system",
+            "source": "frontend/setup-tailwind-design-system"
         },
         {
             "name": "skill-creator",
@@ -143,7 +143,7 @@
         },
         {
             "name": "weekly-activity-summary",
-            "source": "docs/weekly-activity-summary"
+            "source": "meta/weekly-activity-summary"
         }
     ]
 }

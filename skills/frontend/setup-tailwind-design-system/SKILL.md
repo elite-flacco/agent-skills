@@ -1,5 +1,5 @@
 ---
-name: setup-design-system-tw
+name: setup-tailwind-design-system
 description: Use when scaffolding a new frontend project on Tailwind CSS v4, when globals.css doesn't exist yet, or when the user wants to set up a v4 design system with semantic tokens, fluid typography, a badge color palette, and component classes.
 ---
 

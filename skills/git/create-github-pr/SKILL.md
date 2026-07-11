@@ -1,9 +1,9 @@
 ---
-name: create-pr
+name: create-github-pr
 description: Use when the user asks to create or open a GitHub pull request — e.g. "create a PR", "open a pull request", "make a PR", "gh pr create", "open it for review", or push a branch and open it for review. Also covers draft PRs, requesting reviewers, and choosing a base branch.
 ---
 
-# Create Pull Request
+# Create GitHub Pull Request
 
 Create a GitHub pull request. Assume you are already on a branch and changes have been committed.
 

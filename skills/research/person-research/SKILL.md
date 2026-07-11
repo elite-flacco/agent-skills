@@ -1,9 +1,9 @@
 ---
-name: people-research
+name: person-research
 description: Use when the user asks to research a person — e.g. "research my interviewer", "look up this person", "prepare me for an interview with X" — to prepare for a conversation, interview, or meeting.
 ---
 
-# Perform People Research
+# Research a Person
 
 ## Instructions
 1. Identify the interviewer and link to the job description using Notion MCP (ask the user for the relevant Notion page if not provided).

@@ -1,9 +1,9 @@
 ---
-name: design-inspirations
+name: explore-design-variations
 description: Use when the user wants multiple visual variations of a UI (e.g. landing page, dashboard, button) to explore different design directions — e.g. asks for "design variations", "alternatives", "explore styles", "a few takes on", "redesign", "mockups", "show me options", or wants variations side-by-side in the browser.
 ---
 
-# Design Inspirations
+# Explore Design Variations
 
 Create different visual variations of UI components (e.g. landing page, dashboard, or button designs). Each variation must be accessible via its own temporary route so users navigate between them in the browser (no git worktrees, no toggling).
 

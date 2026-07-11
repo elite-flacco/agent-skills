@@ -1,9 +1,9 @@
 ---
-name: explain-to-me
+name: explain-technical-issue
 description: Use when the user asks for an explanation of an error, command output, code behavior, or technical issue — e.g. "what does this error mean", "explain this stack trace", "why is this failing", "what does this command do".
 ---
 
-# Explain To Me
+# Explain a Technical Issue
 
 Given the error message, command output, code, or issue the user is asking about:
 

@@ -1,9 +1,9 @@
 ---
-name: show-prs
+name: list-github-prs
 description: Use when the user asks to list, show, or review open pull requests on GitHub — e.g. "show my PRs", "what PRs are open", "list pull requests", "show open PRs across my repos", "gh pr list", or review PRs across repositories.
 ---
 
-# Show Open Pull Requests
+# List GitHub Pull Requests
 
 List all open PRs on the current repo, or across all of the authenticated GitHub user's repos with `--all`.
 

@@ -1,6 +1,6 @@
 # Emoji Conventional Commit Prefixes
 
-Single source of truth for emoji + conventional-commit prefixes used in commit messages and PR titles. Used by the `commit` and `azdo-create-pr` skills.
+Single source of truth for emoji + conventional-commit prefixes used in commit messages and PR titles. Used by the `commit` and `azure-devops-create-pr` skills.
 
 Each commit/PR type pairs with an appropriate emoji. Format: `<emoji> <type>(<scope>): <description>`.
 

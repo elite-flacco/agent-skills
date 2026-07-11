@@ -9,7 +9,7 @@ This skill is **rigid** — follow every rule exactly. Do not adapt or skip.
 
 ## 1. Design System Setup (Non-Negotiable Sequence)
 
-**New projects:** Invoke the `setup-design-system-tw` skill as a **standalone step before writing any UI code or dispatching any UI subagent.** Subagents receive instructions, not skill invocations — globals.css with semantic tokens must exist before the UI prompt is written.
+**New projects:** Invoke the `setup-tailwind-design-system` skill as a **standalone step before writing any UI code or dispatching any UI subagent.** Subagents receive instructions, not skill invocations — globals.css with semantic tokens must exist before the UI prompt is written.
 
 **Existing projects:** Read `globals.css` before touching anything. Check what tokens and `@layer components` classes already exist. Never add new raw values — add a token first.
 
@@ -76,12 +76,12 @@ Subagents **cannot invoke skills** — they start fresh without access to the Sk
 
 ### For scaffolding subagents (new project)
 
-Before dispatching, invoke the `setup-design-system-tw` skill yourself, read the CSS template from it, and include it in the subagent prompt along with the rules above:
+Before dispatching, invoke the `setup-tailwind-design-system` skill yourself, read the CSS template from it, and include it in the subagent prompt along with the rules above:
 
 ```
 FRONTEND DESIGN SYSTEM — follow these exactly:
 1. Use the globals.css template below as the project's global stylesheet. Do NOT create your own.
-<paste the CSS template from the setup-design-system-tw skill here>
+<paste the CSS template from the setup-tailwind-design-system skill here>
 2. Follow the frontend rules below exactly.
 <paste sections 2–10 of this skill, rephrased as imperatives>
 ```

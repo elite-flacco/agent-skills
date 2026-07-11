@@ -1,7 +1,7 @@
 # PR Recipe (shared)
 
-Shared recipe for creating a pull request, used by the `create-pr` (GitHub) and
-`azdo-create-pr` (Azure DevOps) skills. Both follow these steps; only the final
+Shared recipe for creating a pull request, used by the `create-github-pr` (GitHub) and
+`azure-devops-create-pr` (Azure DevOps) skills. Both follow these steps; only the final
 open-the-PR command and any platform-specific extras (e.g. AzDo work-item
 linking) differ — see your own skill for those.
 
