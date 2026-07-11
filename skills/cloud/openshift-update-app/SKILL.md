@@ -7,15 +7,10 @@ description: Use when the user wants to deploy code changes to an app already ru
 
 Quickly rebuild and redeploy an existing Next.js application on OpenShift when code changes.
 
-## Overview
+## When to Read What
 
-This skill handles:
-1. Prerequisites verification (logged in, correct directory)
-2. Rebuilding the image in OpenShift
-3. Tagging the new image
-4. Waiting for automatic rollout
-5. Verifying the update
-6. Quick troubleshooting if needed
+- **Always follow** — the workflow below.
+- **Read on errors** — `references/troubleshooting.md` (BuildPodEvicted, build hangs, route/proxy/pod issues, image-tagging commands). Those commands apply identically to updates.
 
 ## Step 1: Prerequisites Check
 
@@ -69,63 +64,26 @@ Start a new build from the current directory:
 oc start-build <app-name> --from-dir=. --follow
 ```
 
-**Tell the user:** "Building... This takes 5-10 minutes for Next.js apps (npm install is slow)."
-
-Monitor the build logs. Watch for:
-- ✅ `Successfully pushed` → build succeeded
-- ❌ `BuildPodEvicted` → memory issue, may need to increase limits
-- ❌ Build hangs at "Collecting page data" → Dockerfile missing dummy env vars
-- ❌ `npm ERR!` → dependency or code issue in the app
-
-**If build fails:**
-1. Check the error in the logs
-2. Common fixes:
-   - BuildPodEvicted: `oc patch bc/<app-name> --type=json -p='[{"op":"replace","path":"/spec/resources","value":{"limits":{"memory":"6Gi","cpu":"2"},"requests":{"memory":"3Gi","cpu":"1"}}}]'`
-   - Missing dummy env vars: Check Dockerfile builder stage has `ENV ADO_PAT=dummy_build_value`
-   - Code errors: Fix the code and rebuild
+Takes 5–10 minutes for Next.js apps (npm install is slow). Watch for `Successfully pushed` (success) or failure signals like `BuildPodEvicted`, build hangs at "Collecting page data", or `npm ERR!`. On failure, see `references/troubleshooting.md` for fixes (memory limits, dummy env vars, code errors).
 
 ## Step 4: Tag the New Image
 
-After successful build:
+After a successful build, tag the latest build's image digest as `:latest` so the deployment picks it up. The full tagging commands (extract build number → digest → `oc tag`) are in `references/troubleshooting.md` under "Reference Commands".
 
-```bash
-# Get the latest build number and image digest
-BUILD_NUM=$(oc get builds --sort-by=.metadata.creationTimestamp | grep <app-name> | tail -1 | awk '{print $1}' | cut -d'-' -f3)
-NEW_DIGEST=$(oc get build/<app-name>-${BUILD_NUM} -o jsonpath='{.status.output.to.imageDigest}')
-REGISTRY_URL=$(oc get build/<app-name>-${BUILD_NUM} -o jsonpath='{.status.outputDockerImageReference}' | cut -d'/' -f1)
-
-# Tag it as latest
-oc tag ${REGISTRY_URL}/<namespace>/<app-name>@${NEW_DIGEST} <app-name>:latest
-```
-
-**Explain:** "This updates the 'latest' tag to point to your new build. The deployment will automatically roll out."
+The deployment automatically rolls out once `:latest` moves.
 
 ## Step 5: Watch the Rollout
-
-The deployment automatically picks up the new image and rolls out:
 
 ```bash
 oc get pods -l deployment=<app-name> -w
 ```
 
-**Tell the user:** "Watching pods update... Press Ctrl+C when you see the new pod Running."
+Press Ctrl+C when the new pod is `1/1 Running`. Expected sequence: old pod keeps running → new pod starts (ContainerCreating → Running) → old pod terminates.
 
-What to expect:
-1. Old pod keeps running
-2. New pod starts (ContainerCreating → Running)
-3. Once new pod is ready, old pod terminates
-4. Should see: `<app-name>-<new-hash>  1/1  Running`
-
-**If new pod fails:**
-- Check why: `oc logs deployment/<app-name> --tail=50`
-- Common issues:
-  - App crashes on startup → code issue, check logs
-  - Environment variables missing → unlikely if this was working before
-  - Memory/CPU limits too low → increase if needed
+If the new pod fails to start, check `oc logs deployment/<app-name> --tail=50` and see `references/troubleshooting.md` for diagnosis (app crashes, missing env vars, resource limits).
 
 ## Step 6: Verify the Update
 
-### Quick checks:
 ```bash
 # Verify new pod is running
 oc get pods -l deployment=<app-name>
@@ -134,36 +92,13 @@ oc get pods -l deployment=<app-name>
 oc logs deployment/<app-name> --tail=20
 ```
 
-Should see Next.js startup message.
+Get the route URL and ask the user to open it and confirm the changes are there:
 
-### Test the app:
 ```bash
-# Get the route URL
-oc get route <app-name> -o jsonpath='https://{.spec.host}'
+oc get route <app-name> -o jsonpath='https://{.spec.host}\n'
 ```
 
-Ask the user: "Can you open <URL> in your browser and verify the changes are there?"
-
-**Common issues:**
-
-**Old code still showing:**
-- Hard refresh: Ctrl+Shift+R (or Cmd+Shift+R on Mac)
-- Check pod started recently: `oc get pods -l deployment=<app-name>` (AGE should be < few minutes)
-- If pod is old, rollout might not have happened:
-  ```bash
-  oc rollout status deployment/<app-name>
-  oc rollout restart deployment/<app-name>  # Force restart if needed
-  ```
-
-**App not loading:**
-- Check pod is Running: `oc get pods -l deployment=<app-name>`
-- Check logs for errors: `oc logs deployment/<app-name>`
-- Check route: `oc describe route <app-name>` (should show TLS: edge, Endpoints: <pod-ip>)
-
-**Data not loading (API calls failing):**
-- Usually means proxy not configured or PAT expired
-- Check env vars: `oc get deployment/<app-name> -o jsonpath='{.spec.template.spec.containers[0].env[?(@.name=="HTTPS_PROXY")]}'`
-- Verify PAT: `oc get deployment/<app-name> -o jsonpath='{.spec.template.spec.containers[0].env[?(@.name=="ADO_PAT")].value}'`
+If old code still shows (hard refresh / `oc rollout restart`), the app won't load (pod/route/TLS), or API calls fail (proxy/PAT), see `references/troubleshooting.md`.
 
 ## Success!
 
@@ -174,11 +109,9 @@ Tell the user:
 - ✅ New pod running: <pod-name>
 - ✅ App accessible at: <URL>
 
-## Troubleshooting
+## Update-Specific Config Changes
 
-For rollback, force restart, deployment history, scaling, and diagnosing app-not-loading / proxy / TLS issues, see the shared reference in the `openshift-deploy-nextjs` skill: `references/troubleshooting.md`. Those commands (e.g. `oc rollout undo`, `oc rollout restart`, `oc get all -l app=...`) apply identically here.
-
-Two update-specific config changes that don't require a full redeploy:
+Two config changes that don't require a full redeploy:
 
 **Environment variables changed:**
 ```bash
