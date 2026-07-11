@@ -16,7 +16,7 @@ Create a well-formatted pull request in Azure DevOps with proper emoji titles an
 
 ## Process
 
-Follow the shared PR recipe in `../_shared/pr-recipe.md` for the common steps (verify state → push → analyze diff → write body). The Azure-DevOps-specific steps are below.
+Follow the PR recipe in `references/pr-recipe.md` for the common steps (verify state → push → analyze diff → write body). The Azure-DevOps-specific steps are below.
 
 ### 1. Gather PR information
 

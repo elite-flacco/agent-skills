@@ -9,7 +9,7 @@ Create a GitHub pull request. Assume you are already on a branch and changes hav
 
 ## Instructions
 
-Follow the shared PR recipe in `../_shared/pr-recipe.md` (verify state → push → analyze diff → write body). Then open the PR with `gh`:
+Follow the PR recipe in `references/pr-recipe.md` (verify state → push → analyze diff → write body). Then open the PR with `gh`:
 
 ```bash
 gh pr create --base <base> --title "<title>" --body-file <body-file> [--draft] [--reviewer ...] [--label ...]
