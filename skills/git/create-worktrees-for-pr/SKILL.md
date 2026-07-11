@@ -14,10 +14,12 @@ Create one git worktree per open pull request, so each PR can be built, run, and
 
 For a **single** new-branch worktree, use the `create-worktree` skill instead. To **remove** worktrees, use `remove-worktree`.
 
+Read `create-worktree` before proceeding and apply its shared placement, gitignore, environment-file, and verification conventions to every worktree created here.
+
 ## Instructions
 
-1. Ensure `.worktrees/` exists and is gitignored (add `.worktrees/` to `.gitignore` if missing).
-2. Verify the GitHub CLI is authenticated: `gh auth status`.
+1. Verify the GitHub CLI is authenticated: `gh auth status`.
+2. Fetch current remote branches: `git fetch --all --prune`.
 3. For each open PR's head branch, create a worktree at `.worktrees/<branch>` (preserving `/` in the name):
 
    ```bash
@@ -27,13 +29,13 @@ For a **single** new-branch worktree, use the `create-worktree` skill instead. T
        echo "Worktree for $branch already exists — skipping"
        continue
      fi
-     mkdir -p "$path"
+     mkdir -p "$(dirname "$path")"
      git worktree add "$path" "$branch"
    done
    ```
 
-4. **Copy env files** (`.env`, `.env.local`, `.env.*`) from the main checkout into each new worktree root — they're gitignored and must be copied manually. Never sync them back. (Same rule as `create-worktree`.)
-5. List the result: `git worktree list`.
+4. Apply the shared environment-file rules from `create-worktree` to each new checkout.
+5. List the result with `git worktree list` and report created, skipped, and failed branches separately.
 
 ## Notes
 
