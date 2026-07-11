@@ -122,10 +122,6 @@
             "source": "research/save-learning"
         },
         {
-            "name": "setup-design-system",
-            "source": "frontend/setup-design-system"
-        },
-        {
             "name": "setup-design-system-tw",
             "source": "frontend/setup-design-system-tw"
         },
@@ -146,8 +142,8 @@
             "source": "docs/update-readme"
         },
         {
-            "name": "weekly-digest",
-            "source": "docs/weekly-digest"
+            "name": "weekly-activity-summary",
+            "source": "docs/weekly-activity-summary"
         }
     ]
 }
