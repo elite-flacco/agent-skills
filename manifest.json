@@ -22,6 +22,10 @@
             "source": "git/azure-devops-create-pr"
         },
         {
+            "name": "capture-session-learning",
+            "source": "meta/capture-session-learning"
+        },
+        {
             "name": "clean-branches",
             "source": "git/clean-branches"
         },
@@ -48,10 +52,6 @@
         {
             "name": "deploy-supabase-edge-function",
             "source": "integrations/deploy-supabase-edge-function"
-        },
-        {
-            "name": "explain-technical-issue",
-            "source": "meta/explain-technical-issue"
         },
         {
             "name": "explore-design-variations",
@@ -116,10 +116,6 @@
         {
             "name": "review-code-changes",
             "source": "git/review-code-changes"
-        },
-        {
-            "name": "save-learning",
-            "source": "meta/save-learning"
         },
         {
             "name": "setup-tailwind-design-system",
