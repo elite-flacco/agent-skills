@@ -1,80 +1,20 @@
 ---
 name: init-project
-description: Use when the user asks to initialize or scaffold a new project with baseline files (framework setup, dirs, git, README, CI, tests) — e.g. "initialize a new project", "scaffold a new repo", "set up a new app". For adding lint/format/CI hooks to an existing repo, use project-bootstrap instead.
+description: Use when the user asks to initialize or scaffold a new project with baseline files (framework setup, dirs, git, README) — e.g. "initialize a new project", "scaffold a new repo", "set up a new app", "create a vite app", "new next.js project", "scaffold a fastapi service". For adding lint/format/CI hooks to an existing repo, use project-bootstrap instead.
 ---
 
 # Init Project
 
-# Initialize New Project
-
-Initialize new project with essential structure
+Scaffold a new project's framework skeleton, then delegate tooling and gating to sibling skills.
 
 ## Instructions
 
-1. **Project Analysis and Setup**
-   - Determine the project type and framework the user wants (ask if not clear from the request or current directory)
-   - Analyze current directory to infer project type if not specified
-   - Create project directory structure if needed
-   - Validate that the chosen framework is appropriate for the project type
+1. **Determine the framework.** Ask if it's not clear from the request or the current directory. Pick the matching scaffold command from `references/frameworks.md` (Vite, Next.js, Vue, Angular, Express, FastAPI, React Native, Electron, Node CLI, npm library).
+2. **Scaffold the skeleton.** Run the framework's own scaffolder so the directory layout, build config, and `.gitignore` come from upstream rather than hand-rolled. Add `docs/` and any dirs the scaffolder omits.
+3. **Initialize git + README.** `git init`, stage the scaffold, and write a `README.md` with project name, setup, and run commands. Create the initial commit.
+4. **Delegate lint / format / typecheck scripts** → invoke `add-scripts` (it discovers or pins the toolchain and verifies each script exits 0).
+5. **Delegate CI** → invoke `add-gh-workflows` (copies GitHub Actions defaults into `.github/`).
+6. **(Optional) Delegate the verify-gate** → invoke `project-bootstrap` if the user wants a local verify hook on every turn (in addition to CI). Skip if they only want CI gating.
+7. **Validate.** Run every script the scaffolder produced plus the ones `add-scripts` added; confirm each exits 0 before reporting done. Start the dev server to confirm it boots.
 
-2. **Base Project Structure**
-   - Create essential directories (src/, tests/, docs/, etc.)
-   - Initialize git repository with proper .gitignore for the project type
-   - Create README.md with project description and setup instructions
-   - Set up proper file structure based on project type and framework
-
-3. **Framework-Specific Configuration**
-   - **Web/React**: Set up React with TypeScript, Vite/Next.js, ESLint, Prettier
-   - **Web/Vue**: Configure Vue 3 with TypeScript, Vite, ESLint, Prettier
-   - **Web/Angular**: Set up Angular CLI project with TypeScript and testing
-   - **API/Express**: Create Express.js server with TypeScript, middleware, and routing
-   - **API/FastAPI**: Set up FastAPI with Python, Pydantic models, and async support
-   - **Mobile/React Native**: Configure React Native with navigation and development tools
-   - **Desktop/Electron**: Set up Electron with renderer and main process structure
-   - **CLI/Node**: Create Node.js CLI with commander.js and proper packaging
-   - **Library/NPM**: Set up library with TypeScript, rollup/webpack, and publishing config
-
-4. **Development Environment Setup**
-   - Configure package manager (npm, yarn, pnpm) with proper package.json
-   - Set up TypeScript configuration with strict mode and path mapping
-   - Configure linting with ESLint and language-specific rules
-   - Set up code formatting with Prettier and pre-commit hooks
-   - Add EditorConfig for consistent coding standards
-
-5. **Testing Infrastructure**
-   - Install and configure testing framework (Jest, Vitest, Pytest, etc.)
-   - Set up test directory structure and example tests
-   - Configure code coverage reporting
-   - Add testing scripts to package.json/makefile
-
-6. **Build and Development Tools**
-   - Configure build system (Vite, webpack, rollup, etc.)
-   - Set up development server with hot reloading
-   - Configure environment variable management
-   - Add build optimization and bundling
-
-7. **CI/CD Pipeline**
-   - Create GitHub Actions workflow for testing and deployment
-   - Set up automated testing on pull requests
-   - Configure automated dependency updates with Dependabot
-   - Add status badges to README
-
-8. **Documentation and Quality**
-   - Generate comprehensive README with installation and usage instructions
-   - Create CONTRIBUTING.md with development guidelines
-   - Set up API documentation generation (JSDoc, Sphinx, etc.)
-   - Add code quality badges and shields
-
-9. **Security and Best Practices**
-   - Configure security scanning with npm audit or similar
-   - Set up dependency vulnerability checking
-   - Add security headers for web applications
-   - Configure environment-specific security settings
-
-10. **Project Validation**
-    - Verify all dependencies install correctly
-    - Run initial build to ensure configuration is working
-    - Execute test suite to validate testing setup
-    - Check linting and formatting rules are applied
-    - Validate that development server starts successfully
-    - Create initial commit with proper project structure
+Keep this skill a thin orchestrator — it scaffolds and delegates. The framework matrix and per-framework notes live in `references/frameworks.md`; tooling defaults live in `add-scripts/references/toolchains.md`.

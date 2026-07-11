@@ -1,11 +1,11 @@
 ---
 name: project-bootstrap
-description: Use when starting a brand new project, scaffolding a fresh repo, or before running superpowers:writing-plans / executing-plans / subagent-driven-development on a repo that lacks lint/typecheck/format scripts, CI workflows, or a SubagentStop verify hook. Triggers on requests like "bootstrap this project", "set up new project", or "use project-bootstrap".
+description: Use when starting a brand new project, scaffolding a fresh repo, or before running superpowers:writing-plans / executing-plans / subagent-driven-development on a repo that lacks lint/typecheck/format scripts, CI workflows, or a verify hook. Triggers on "bootstrap this project", "set up new project", or "use project-bootstrap". Works across Claude Code, ZCode, and Codex runtimes.
 ---
 
 # Project Bootstrap
 
-One-time setup for a new project so that every subsequent superpowers spec → plan → subagent flow is gated by automated checks (lint, typecheck, format, tests) at three layers: plan DoD, SubagentStop hook, CI.
+One-time setup for a new project so that every subsequent superpowers spec → plan → subagent flow is gated by automated checks (lint, typecheck, format, tests) at three layers: the `verify` script, a `Stop` hook that re-runs it, and CI. Runtime-agnostic — detects which coding agent(s) are installed and wires the hook for each.
 
 ## When to invoke
 
@@ -14,13 +14,17 @@ Run **once per repo**, after initial framework scaffold (e.g. `create-next-app`)
 Skip if the repo already has all of:
 - `npm run verify` script in `package.json`
 - `.github/workflows/ci.yml`
-- `.claude/settings.json` with a `SubagentStop` hook running `npm run verify`
+- A `Stop` hook running `npm run verify` in an agent config (`.claude/settings.json`, `.zcode/config.json`, or `.codex/hooks.json`)
+
+## Prerequisites
+
+This skill delegates to four sibling skills — confirm they're available before starting: `add-scripts`, `add-github-actions`, `update-changelog`, `update-readme`.
 
 ## Workflow
 
 ### Step 1 — Commit baseline
 
-Confirm scaffold is committed before adding tooling. If working tree is dirty, ask the user to commit or stash first.
+Confirm the scaffold is committed before adding tooling. If the working tree is dirty, ask the user to commit or stash first.
 
 ```bash
 git status
@@ -28,11 +32,11 @@ git status
 
 ### Step 2 — Add scripts
 
-Use the `add-scripts` skill. It adds `lint`, `typecheck`, `format`, `format:check` to `package.json`, installs deps, and verifies each runs clean. Fix any surfaced issues before continuing.
+Invoke `add-scripts`. It adds `lint`, `typecheck`, `format`, `format:check` to `package.json`, installs deps, and verifies each runs clean. Fix any surfaced issues before continuing.
 
 ### Step 3 — Add CI workflows
 
-Use the `add-gh-workflows` skill. It copies `~/.claude/github/` defaults into `.github/` and confirms the shared `update-changelog` and `update-readme` skills are available.
+Invoke `add-github-actions`. It copies workflow defaults into `.github/` and confirms the shared `update-changelog` and `update-readme` skills are available.
 
 After it finishes, open `.github/workflows/ci.yml` and confirm the job runs:
 
@@ -56,31 +60,45 @@ Edit `package.json`:
 
 If the project has no test suite yet, drop `&& npm run test:run` until tests exist. Add it back the moment the first test lands.
 
-### Step 5 — Write the SubagentStop hook + docs reminder script
+### Step 5 — Wire the verify-gate hook
 
-1. Copy `templates/settings.json` (from this skill) to `.claude/settings.json`. This wires two hooks for both `SubagentStop` and `Stop`:
-   - **verify gate** — `git diff --quiet HEAD || npm run verify --silent` (skips on no-op subagents).
-   - **docs reminder** — runs `node .claude/hooks/docs-reminder.cjs`, an advisory check that warns when code changed but `README.md` / `CLAUDE.md` / `AGENTS.md` did not.
-2. Copy `templates/hooks/docs-reminder.cjs` to `.claude/hooks/docs-reminder.cjs` in the project.
-3. If `.claude/settings.json` already exists, merge the hook arrays in rather than overwriting.
+The verify-gate runs `npm run verify` when a coding agent finishes a turn that changed code. It's the same command in every runtime — only the config wrapper, the available hook events, and the timeout unit differ. See `references/runtime-configs.md` for the per-runtime details.
 
-The docs reminder is non-blocking (exit 0). If the user wants it to block the subagent, flip the marked line in `docs-reminder.cjs` to `process.exit(2);`.
+1. **Detect installed runtimes.** Check for `~/.claude`, `~/.zcode`, `~/.codex` (home directories). Wire a config for each one present so the gated repo works no matter which agent opens it. If none are detected, ask the user which runtime they use.
+2. **Copy the matching template(s)** from this skill to the target path:
+
+   | Runtime | Template | Target path |
+   |---|---|---|
+   | Claude Code | `templates/hooks.claude.json` | `.claude/settings.json` |
+   | ZCode | `templates/hooks.zcode.json` | `.zcode/config.json` |
+   | Codex | `templates/hooks.codex.json` | `.codex/hooks.json` |
+
+3. **Merge, don't overwrite.** If the target config already exists, merge the hook arrays in rather than replacing the file.
+4. **Codex trust:** Codex skips hooks until reviewed — tell the user to run `/hooks` and trust the new hook before it will fire.
+
+The shared gate command in all three templates is:
+
+```bash
+git diff --quiet HEAD || npm run verify || exit 2
+```
+
+`git diff --quiet HEAD` exits 0 when the working tree matches HEAD, so verify is skipped for read-only turns. On failure, `exit 2` tells every runtime to surface the failure to the agent (block-and-continue) rather than silently erroring.
 
 ### Step 6 — Drop the plan DoD template into the repo
 
 Copy `templates/plan-dod.md` (from this skill) to `docs/superpowers/plan-dod.md` (or wherever the project keeps superpowers docs). When invoking `superpowers:writing-plans` later, paste this block into the plan prompt so every task inherits the same Definition of Done.
 
-### Step 6.5 — Append plan-authoring rule to project CLAUDE.md
+### Step 7 — Append plan-authoring rule to `AGENTS.md`
 
-This is the step that makes the DoD self-enforcing — without it, the user has to remember to paste `plan-dod.md` into every `writing-plans` prompt.
+This makes the DoD self-enforcing — without it, the user has to remember to paste `plan-dod.md` into every `writing-plans` prompt.
 
-1. If `CLAUDE.md` doesn't exist at the repo root, create it.
-2. Append the contents of `templates/claude-md-block.md` (from this skill) to `CLAUDE.md`.
+1. If `AGENTS.md` doesn't exist at the repo root, create it.
+2. Append the contents of `templates/agents-md-block.md` (from this skill) to `AGENTS.md`.
 3. If a "Plan authoring rules" section already exists, merge — don't duplicate.
 
-Result: future Claude sessions read this rule before invoking `superpowers:writing-plans` and automatically inject the DoD + final docs task into the plan prompt. The user no longer has to remember.
+Result: future agent sessions read this rule before invoking `superpowers:writing-plans` and automatically inject the DoD + final docs task into the plan prompt.
 
-### Step 7 — Verify the gate works end-to-end
+### Step 8 — Verify the gate works end-to-end
 
 ```bash
 npm run verify
@@ -88,53 +106,49 @@ npm run verify
 
 Must exit 0. If it doesn't, fix root cause — never weaken the script to make it pass.
 
-### Step 8 — Commit
+### Step 9 — Commit
 
 ```bash
-git add package.json package-lock.json .github .claude docs/superpowers/plan-dod.md CLAUDE.md
-git commit -m "chore: bootstrap scripts, CI, verify + docs-reminder hooks, plan DoD, plan-authoring rule"
+git add package.json package-lock.json .github .claude .zcode .codex docs/superpowers/plan-dod.md AGENTS.md
+git commit -m "chore: bootstrap scripts, CI, verify hook, plan DoD, plan-authoring rule"
 ```
 
-### Step 9 — Hand off
+(Add only the runtime config dirs you actually created — drop `.claude`/`.zcode`/`.codex` as needed.)
 
-Tell the user bootstrap is complete and they can now invoke `superpowers:brainstorming` or write a spec. The plan-authoring rule in `CLAUDE.md` will automatically inject the DoD and final docs task into every `writing-plans` invocation — no manual pasting required.
+### Step 10 — Hand off
+
+Tell the user bootstrap is complete and they can now invoke `superpowers:brainstorming` or write a spec. The plan-authoring rule in `AGENTS.md` will inject the DoD and final docs task into every `writing-plans` invocation. If they use Codex, remind them to run `/hooks` to trust the new verify hook.
 
 ## Optional: pre-commit gate (third layer)
 
-If the user wants commits blocked locally too:
+If the user wants commits blocked locally too, `husky` + `lint-staged` (or the lighter `simple-git-hooks`) are the common choices:
 
 ```bash
-npm i -D simple-git-hooks
+npm i -D husky lint-staged
+npx husky init
+echo "npm run verify" > .husky/pre-commit
 ```
 
-Add to `package.json`:
-
-```json
-{
-  "simple-git-hooks": { "pre-commit": "npm run verify" },
-  "scripts": { "postinstall": "simple-git-hooks" }
-}
-```
-
-Run `npx simple-git-hooks` once to install the hook. Skip on large test suites where this slows commits unacceptably — CI already covers it.
+Skip on large test suites where this slows commits unacceptably — CI already covers it.
 
 ## Files this skill creates or modifies
 
 | Path | Action |
 |------|--------|
 | `package.json` | add `lint` / `typecheck` / `format` / `format:check` / `verify` scripts |
-| `.github/workflows/*.yml` | copied from `~/.claude/github/workflows/` |
-| `.github/dependabot.yml` | copied from defaults |
-| `update-changelog` skill | available |
-| `update-readme` skill | available |
-| `.claude/settings.json` | add `SubagentStop` + `Stop` hooks (verify gate + docs reminder) |
-| `.claude/hooks/docs-reminder.cjs` | new — advisory script that warns when code changed but docs didn't |
-| `docs/superpowers/plan-dod.md` | new — per-task DoD (incl. inline doc updates) + final docs task |
-| `CLAUDE.md` | append "Plan authoring rules" section so the DoD self-injects into `writing-plans` |
+| `.github/workflows/*.yml` | copied by `add-github-actions` |
+| `.github/dependabot.yml` | copied by `add-github-actions` |
+| `.claude/settings.json` | add `Stop` + `SubagentStop` verify hook (Claude Code runtime) |
+| `.zcode/config.json` | add `Stop` verify hook (ZCode runtime) |
+| `.codex/hooks.json` | add `Stop` + `SubagentStop` verify hook (Codex runtime) |
+| `docs/superpowers/plan-dod.md` | new — per-task DoD + final docs task |
+| `AGENTS.md` | append "Plan authoring rules" section so the DoD self-injects into `writing-plans` |
+
+Only the runtime configs you actually need are created — one per detected runtime.
 
 ## Notes
 
-- The hook fires on **every** subagent finish in the project, not just superpowers-dispatched ones. That's intentional.
-- If `npm run verify` is too slow for tight subagent loops, scope the hook command (e.g. `npm run typecheck && npm run lint`) and let CI catch the rest. Don't disable the hook entirely.
-- The hook command is `git diff --quiet HEAD || npm run verify --silent` — `git diff --quiet HEAD` exits 0 when the working tree matches HEAD, so verify is skipped for read-only subagents (Explore, Plan, code-reviewer) and for write-capable subagents that happened not to modify anything. `||` is supported by bash, cmd, and PowerShell 7+. On PowerShell 5.1, replace with `git diff --quiet HEAD; if ($LASTEXITCODE -ne 0) { npm run verify --silent }`.
+- **Per-subagent vs per-turn.** Claude Code and Codex support a `SubagentStop` event (verify re-runs after each subagent finishes). ZCode does not — its gate fires on `Stop` (turn end) only. In all three, CI remains the per-commit backstop.
+- **If `npm run verify` is too slow** for tight loops, scope the hook command (e.g. `npm run typecheck && npm run lint`) and let CI catch the rest. Don't disable the hook entirely.
+- **Cross-runtime differences** — timeout units (ms vs seconds), config shape, and enablement flags — are documented in `references/runtime-configs.md`. The hook *command* is identical everywhere.
 - This skill does **not** auto-fire. The user invokes it manually on new repos.
