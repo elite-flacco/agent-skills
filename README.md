@@ -1,11 +1,10 @@
 # Personal Agent Skills
 
-This repository is the source of truth for user-authored skills shared across Claude Code and Codex.
+A collection of skills covering git/PR workflows, project bootstrapping, frontend/design, cloud deployment, integrations, and more, shared across Claude Code, Codex, Pi, and ZCode.
 
 ## Layout
 
 - `skills/` contains categorized real skill folders. Each leaf folder should include a `SKILL.md`.
-- `legacy-claude-commands/` preserves the old Claude Code slash command markdown files after conversion.
 - `scripts/` contains PowerShell scripts for Windows; `scripts/macos/` contains bash equivalents.
   - `sync-manifest` regenerates `manifest.json` from `skills/**/SKILL.md`.
   - `link` creates discovery junctions/symlinks in `~/.claude/skills`, `~/.codex/skills`, `~/.pi/agent/skills`, and `~/.zcode/skills`, and removes stale links left behind by renamed or deleted skills (only links that point into this repo; anything else is left alone).
