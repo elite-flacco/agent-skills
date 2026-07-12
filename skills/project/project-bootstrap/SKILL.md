@@ -88,13 +88,13 @@ git diff --quiet HEAD || npm run verify || exit 2
 
 Copy `templates/plan-dod.md` (from this skill) to `docs/superpowers/plan-dod.md` (or wherever the project keeps superpowers docs). When invoking `superpowers:writing-plans` later, paste this block into the plan prompt so every task inherits the same Definition of Done.
 
-### Step 7 — Append plan-authoring rule to `AGENTS.md`
+### Step 7 — Append plan-authoring rule to `AGENTS.md` and `CLAUDE.md`
 
 This makes the DoD self-enforcing — without it, the user has to remember to paste `plan-dod.md` into every `writing-plans` prompt.
 
-1. If `AGENTS.md` doesn't exist at the repo root, create it.
-2. Append the contents of `templates/agents-md-block.md` (from this skill) to `AGENTS.md`.
-3. If a "Plan authoring rules" section already exists, merge — don't duplicate.
+1. For each of `AGENTS.md` and `CLAUDE.md` at the repo root: if it doesn't exist, create it.
+2. Append the contents of `templates/agents-md-block.md` (from this skill) to both files.
+3. If a "Plan authoring rules" section already exists in either file, merge — don't duplicate.
 
 Result: future agent sessions read this rule before invoking `superpowers:writing-plans` and automatically inject the DoD + final docs task into the plan prompt.
 
@@ -109,7 +109,7 @@ Must exit 0. If it doesn't, fix root cause — never weaken the script to make i
 ### Step 9 — Commit
 
 ```bash
-git add package.json package-lock.json .github .claude .zcode .codex docs/superpowers/plan-dod.md AGENTS.md
+git add package.json package-lock.json .github .claude .zcode .codex docs/superpowers/plan-dod.md AGENTS.md CLAUDE.md
 git commit -m "chore: bootstrap scripts, CI, verify hook, plan DoD, plan-authoring rule"
 ```
 
@@ -117,7 +117,7 @@ git commit -m "chore: bootstrap scripts, CI, verify hook, plan DoD, plan-authori
 
 ### Step 10 — Hand off
 
-Tell the user bootstrap is complete and they can now invoke `superpowers:brainstorming` or write a spec. The plan-authoring rule in `AGENTS.md` will inject the DoD and final docs task into every `writing-plans` invocation. If they use Codex, remind them to run `/hooks` to trust the new verify hook.
+Tell the user bootstrap is complete and they can now invoke `superpowers:brainstorming` or write a spec. The plan-authoring rule in `AGENTS.md` and `CLAUDE.md` will inject the DoD and final docs task into every `writing-plans` invocation. If they use Codex, remind them to run `/hooks` to trust the new verify hook.
 
 ## Optional: pre-commit gate (third layer)
 
@@ -143,6 +143,7 @@ Skip on large test suites where this slows commits unacceptably — CI already c
 | `.codex/hooks.json` | add `Stop` + `SubagentStop` verify hook (Codex runtime) |
 | `docs/superpowers/plan-dod.md` | new — per-task DoD + final docs task |
 | `AGENTS.md` | append "Plan authoring rules" section so the DoD self-injects into `writing-plans` |
+| `CLAUDE.md` | append the same "Plan authoring rules" section (Claude Code reads `CLAUDE.md` as its primary memory file) |
 
 Only the runtime configs you actually need are created — one per detected runtime.
 
