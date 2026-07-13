@@ -26,6 +26,7 @@ authoring.
 ## Dark Mode
 - [ ] `color-scheme` and `supported-color-schemes` meta tags present.
 - [ ] `class` attributes added to elements needing dark-mode overrides.
+- [ ] **Grep the output for every `color:#`/`background-color:#` inline style and confirm each one sits on an element that also carries a dark-mode class (or is intentionally exempt, e.g. a badge whose color must stay fixed).** Defining a `.dark-*` rule in `<style>` is not enough — verify it's actually referenced by a `class=` attribute somewhere. It's easy to cover body text and card backgrounds but forget title links, headings, or footer text, leaving them the wrong color against a dark-mode background.
 - [ ] `@media (prefers-color-scheme: dark)` rules with `!important`.
 - [ ] Outlook `[data-ogsc]` / `[data-ogsb]` selectors added.
 - [ ] Transparent PNGs given appropriate dark-mode treatment.

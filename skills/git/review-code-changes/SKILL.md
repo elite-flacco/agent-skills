@@ -36,6 +36,8 @@ Review a branch or staged changes like a senior engineer seeing the diff for the
 4. Run targeted verification.
    - Prefer project scripts from `package.json`, `pyproject.toml`, `Makefile`, `justfile`, CI config, or existing docs over invented commands.
    - Run relevant lint, typecheck, unit, integration, formatting, build, or migration checks when practical.
+   - Exercise the code directly, not only through the test suite. Tests confirm the code does what the author expected; they don't reveal what they didn't think of. Run the real query against the live database, call the function with inputs from real source files, replay an actual request. Escaping or quoting that behaves differently than assumed, off-by-ones in date or pagination math, fields that are null in real input, logic that only triggers under specific data shapes — these are often obvious the moment you run them, and invisible when you only read.
+   - Locate real input data before inventing test cases — the populated database, local data directories, captured API responses, log files. Fixtures encode the author's assumptions; real data breaks them.
    - If official third-party docs are unavailable or unclear, say so and distinguish inference from verified behavior.
 
 5. Verify UI changes through the app.
@@ -80,6 +82,8 @@ If no issues are found, say that clearly and still report residual risk and chec
 | Reviewing only the diff | Read nearby callers, tests, config, schema, routes, and runtime entry points |
 | Treating clean code as correct behavior | Trace the functional workflow and verify the change logically solves the real user or product problem |
 | Guessing SDK or framework behavior from memory | Verify new, upgraded, unfamiliar, or behavior-critical third-party usage against official version-specific sources |
+| Treating a passing test suite as evidence of correctness | Tests pass against the author's own assumptions; run the code against real data — the live DB, local source files, actual API responses — to surface what they didn't expect |
+| Trusting a comment that asserts third-party behavior | A comment like "this is free" or "the API requires X" is an unverified claim; read the actual doc, spec, or SDK field and confirm it independently |
 | Spawning subagents before understanding scope | Scope the diff first, then delegate narrow independent lenses and synthesize one final review |
 | Reporting style preferences as bugs | Prioritize behavior, architecture risk, maintainability, tests, and user impact |
 | Skipping UI verification because code compiles | Use the in-app browser where possible and agent-browser for repeatable user-flow checks |
