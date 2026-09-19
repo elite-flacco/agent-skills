@@ -46,3 +46,5 @@ export function ThemeToggle() {
 ```
 
 Requires `DropdownMenu` from shadcn/ui (`@/components/ui/dropdown-menu`). If the project doesn't use shadcn/ui, either add the component or stick with the default simple toggle.
+
+**Design-system projects:** the icon cross-fade relies on `dark:` utilities, which the `frontend-rules` skill bans. Ignore `frontend-rules` when user specifically asks for a dropdown toggle.

@@ -9,7 +9,7 @@ Add a dark mode / theme toggle to a Next.js app using `next-themes`. The default
 
 ## Prerequisites
 
-- Next.js 13+ with App Router (recommended) or Pages Router
+- Next.js 13+ with App Router (`app/` directory; the steps below use `app/layout.tsx`)
 - Tailwind CSS configured with `darkMode: 'class'`
 - shadcn/ui (the toggle below uses `Button` from `@/components/ui/button`). If the project doesn't use shadcn/ui, replace it with a plain `<button>`. The dropdown variant additionally needs `DropdownMenu`. Confirm with the user before introducing a new UI dependency.
 
@@ -70,7 +70,7 @@ export default function RootLayout({
 
 ### 3. Theme toggle component (default: simple two-state)
 
-Create `components/theme-toggle.tsx`. A minimal sun/moon button that flips between light and dark. This is the default — it guards on `mounted` because it reads `theme` to render conditional icons; see `references/next-themes-api.md` for the hydration pattern.
+Create `components/theme-toggle.tsx`. A minimal sun/moon button that flips between light and dark. This is the default — it guards on `mounted` because it reads `resolvedTheme` to render conditional icons (use `resolvedTheme`, not `theme`: with `defaultTheme="system"`, `theme` is `"system"` on first load while `resolvedTheme` is the actual applied theme); see `references/next-themes-api.md` for the hydration pattern.
 
 ```tsx
 "use client";
@@ -82,7 +82,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -101,9 +101,9 @@ export function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
-      {theme === "dark" ? (
+      {resolvedTheme === "dark" ? (
         <Sun className="h-[1.2rem] w-[1.2rem]" />
       ) : (
         <Moon className="h-[1.2rem] w-[1.2rem]" />
