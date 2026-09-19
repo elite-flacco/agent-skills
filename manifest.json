@@ -122,6 +122,10 @@
             "source": "frontend/setup-tailwind-design-system"
         },
         {
+            "name": "skill-audit-batch-review",
+            "source": "meta/skill-audit-batch-review"
+        },
+        {
             "name": "skill-creator",
             "source": "meta/skill-creator"
         },
