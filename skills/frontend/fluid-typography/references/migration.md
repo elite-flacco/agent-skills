@@ -88,15 +88,17 @@ const Heading = styled.h1`
 
 ```
 clamp(MIN, PREFERRED, MAX)
-PREFERRED ≈ MIN_REM + ((MAX_REM - MIN_REM) / (MAX_VP - MIN_VP)) * 100vw
+rate_vw = (MAX_PX − MIN_PX) / (MAX_VP − MIN_VP) × 100        ← work in px, then convert to vw
+PREFERRED = (MIN_PX − rate_vw × MIN_VP / 100)px + rate_vw vw  ← intercept so PREFERRED(MIN_VP) = MIN
 ```
 
 Worked example — 16px at 320px → 20px at 1200px:
 - Viewport range: 1200 − 320 = 880px
-- Size change: 1.25 − 1 = 0.25rem
-- Rate: 0.25 / 880 ≈ 0.000284 per px → 0.0284vw
-- PREFERRED = 0.95rem + 0.25vw
-- Result: `clamp(1rem, 0.95rem + 0.25vw, 1.25rem)`
+- Size change: 1.25 − 1 = 0.25rem = **4px** (convert rem→px before dividing)
+- Rate: 4px / 880px per viewport-px → as a vw value: 4 / 880 × 100 = **0.4545vw**
+- Intercept: at 320px the preferred value must equal the min: 16 − 0.4545 × 3.2 = 14.55px ≈ **0.909rem**
+- PREFERRED = 0.909rem + 0.4545vw
+- Result: `clamp(1rem, 0.909rem + 0.4545vw, 1.25rem)` (exactly 16px at 320px, 20px at 1200px)
 
 ### Quick adjustment presets
 

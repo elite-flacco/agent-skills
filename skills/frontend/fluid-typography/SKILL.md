@@ -50,7 +50,7 @@ Full `:root` block (with line-heights and heading rules): `references/scale.css`
 - Body text: 16–18px max for readability; never below 16px.
 - Headings: scale more aggressively than body.
 - Pair with `max-width: 65ch` for measure.
-- `clamp()` has full support in all modern browsers (Chrome 79+, Firefox 75+, Safari 13.1+); the middle value is the fallback.
+- `clamp()` has full support in all modern browsers (Chrome 79+, Firefox 75+, Safari 13.1+). Where `clamp()` is unsupported the whole declaration is dropped, so provide a plain `font-size` fallback declaration before it when supporting old browsers.
 
 ## Resources
 
