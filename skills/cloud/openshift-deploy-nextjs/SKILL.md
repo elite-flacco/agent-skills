@@ -50,9 +50,7 @@ oc project <namespace>
 oc new-build --binary --name=<app-name> --strategy=docker
 
 # CRITICAL: Next.js builds need 4Gi — set this before building
-oc patch bc/<app-name> --type=json -p='[
-  {"op":"add","path":"/spec/resources","value":{"limits":{"memory":"4Gi","cpu":"2"},"requests":{"memory":"2Gi","cpu":"1"}}}
-]'
+oc patch bc/<app-name> --type=merge -p '{"spec":{"resources":{"limits":{"memory":"4Gi","cpu":"2"},"requests":{"memory":"2Gi","cpu":"1"}}}}'
 
 oc start-build <app-name> --from-dir=. --follow
 ```
@@ -100,7 +98,7 @@ Edge TLS = HTTPS externally, router handles TLS, forwards HTTP to the app on 808
 ```bash
 oc get pods -l deployment=<app-name>                 # 1/1 Running
 oc logs deployment/<app-name> --tail=50              # "Next.js ready"
-oc exec deployment/<app-name> -- curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/  # 200
+oc exec deployment/<app-name> -- wget -qO- http://localhost:8080/  # exit 0 + HTML output = app serving
 ```
 Then ask the user to open the URL in a browser. For any issue, see `references/troubleshooting.md`.
 

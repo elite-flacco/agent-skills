@@ -126,4 +126,6 @@ oc set resources deployment/<app-name> --limits=cpu=2,memory=1Gi --requests=cpu=
 
 **Major changes (Dockerfile, build strategy, etc.):**
 - Use the `openshift-deploy-nextjs` skill to redo the full deployment, or
-- Manually delete and recreate: `oc delete all -l app=<app-name>` then redeploy
+- Manually delete and recreate — require explicit user confirmation before deleting anything:
+  - Prefer named resources: `oc delete deployment,svc,bc -l app=<app-name>` then redeploy
+  - Note: `oc delete all` excludes Routes (a dangling route remains — delete/recreate it or reuse it explicitly) and leaves PVCs, secrets, and env config in place

@@ -1,12 +1,14 @@
+<!-- Mirrored between openshift-deploy-nextjs and openshift-update-app (references/troubleshooting.md) — edit both copies. -->
+
 # OpenShift Deployment — Troubleshooting & Reference
 
 ## Common Issues
 
 ### BuildPodEvicted
 **Symptom:** Build fails with eviction message.
-**Solution:** Memory too low. Bump it:
+**Solution:** Memory too low. Bump it with a merge patch (works whether or not `/spec/resources` is already set):
 ```bash
-oc patch bc/<app-name> --type=json -p='[{"op":"replace","path":"/spec/resources","value":{"limits":{"memory":"6Gi","cpu":"2"},"requests":{"memory":"3Gi","cpu":"1"}}}]'
+oc patch bc/<app-name> --type=merge -p '{"spec":{"resources":{"limits":{"memory":"6Gi","cpu":"2"},"requests":{"memory":"3Gi","cpu":"1"}}}}'
 ```
 
 ### Build hangs at "Collecting page data"
@@ -65,8 +67,10 @@ oc rollout restart deployment/<app-name>
 oc adm top pod -l deployment=<app-name>
 
 # Tag the latest build's image
-BUILD_NUM=$(oc get builds --sort-by=.metadata.creationTimestamp | grep <app-name> | tail -1 | awk '{print $1}' | cut -d'-' -f3)
-IMAGE_DIGEST=$(oc get build/<app-name>-${BUILD_NUM} -o jsonpath='{.status.output.to.imageDigest}')
-REGISTRY_URL=$(oc get build/<app-name>-${BUILD_NUM} -o jsonpath='{.status.outputDockerImageReference}' | cut -d'/' -f1)
+# Look up the most recent build by its buildconfig label (splitting the build
+# name on dashes breaks when the app name itself contains a dash).
+BUILD_NAME=$(oc get builds -l buildconfig=<app-name> --sort-by=.metadata.creationTimestamp -o name | tail -1 | cut -d'/' -f2)
+IMAGE_DIGEST=$(oc get build/${BUILD_NAME} -o jsonpath='{.status.output.to.imageDigest}')
+REGISTRY_URL=$(oc get build/${BUILD_NAME} -o jsonpath='{.status.outputDockerImageReference}' | cut -d'/' -f1)
 oc tag ${REGISTRY_URL}/<namespace>/<app-name>@${IMAGE_DIGEST} <app-name>:latest
 ```
