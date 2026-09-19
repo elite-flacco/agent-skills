@@ -17,7 +17,7 @@ Create different visual variations of UI components (e.g. landing page, dashboar
 1) Inspect the repo quickly to confirm:
     - Next.js app router exists
     - styling system (Tailwind or other)
-2) Create a new route group: app/variants/(ui)/...
+2) Create the variants directory: app/variants/
 3) Add an index page at: app/variants/page.tsx that lists links to all variations with a simple grid of “Variant 01…”.
 4) Implement the routes, e.g. 10 routes:
    - app/variants/v01/page.tsx
@@ -44,3 +44,8 @@ Create different visual variations of UI components (e.g. landing page, dashboar
    - show current variant label
 8) Do NOT break existing routes. Keep everything isolated under /variants.
 9) Provide a short summary of what you created, plus the exact routes to visit.
+10) Verify: start the dev server and confirm the index and every /variants/vNN route renders without console errors.
+
+## Design-System Exemption
+
+Variant pages are exempt from the `frontend-rules` design-system rules — they exist to explore OUTSIDE the system. Do not let those constraints (semantic tokens only, no arbitrary values, component classes) suppress stylistic diversity between variants. 
