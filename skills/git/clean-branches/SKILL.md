@@ -1,6 +1,6 @@
 ---
 name: clean-branches
-description: Use when the user asks to clean up, delete, or prune merged or stale git branches — e.g. "clean up branches", "delete merged branches", "remove old branches", "prune remote tracking branches".
+description: Use when the user asks to clean up, delete, or prune merged or stale git branches — e.g. "clean up branches", "delete merged branches", "remove old branches", "prune remote tracking branches". Agent-prefixed branches (`zcode/`, `codex/`, `claude/`) are safe to clean.
 ---
 
 # Clean Branches
@@ -21,6 +21,7 @@ git remote -v
 
 # Detect the default branch name
 git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
+# If that errors, run `git remote set-head origin -a` (or read the default branch from `git remote show origin`)
 ```
 
 ### 2. Safety Precautions
@@ -53,7 +54,7 @@ git for-each-ref --format='%(committerdate) %(authorname) %(refname)' --sort=com
 
 # Find branches older than 30 days
 # macOS (BSD date): use -v-30d. Linux (GNU date): use -d '30 days ago'.
-git for-each-ref --format='%(refname:short) %(committerdate)' refs/heads | awk '$2 < "'$(date -v-30d '+%Y-%m-%d' 2>/dev/null || date -d '30 days ago' '+%Y-%m-%d')'"'
+git for-each-ref --format='%(refname:short) %(committerdate:short)' refs/heads | awk '$2 < "'$(date -v-30d '+%Y-%m-%d' 2>/dev/null || date -d '30 days ago' '+%Y-%m-%d')'"'
 ```
 
 ### 5. Interactive Branch Review
@@ -78,8 +79,8 @@ git branch -D <branch-name>
 ### 7. Remote Branch Cleanup
 
 ```bash
-# Prune remote tracking branches deleted on the remote
-git remote prune origin
+# Prune remote tracking branches deleted on the remote (fetch + prune in one)
+git fetch --prune origin
 
 # Delete a remote branch
 git push origin --delete <branch-name>
@@ -115,11 +116,9 @@ git checkout -b <recovered-branch> <commit-hash>
 # Clean up all merged feature/hotfix/bugfix branches except protected ones
 git branch --merged main | grep -E "^  (feature|hotfix|bugfix)/" | xargs -n 1 git branch -d
 
-# Interactive cleanup with confirmation
-git branch --merged main | grep -v "main\|master\|develop" | xargs -n 1 -p git branch -d
-
-# Batch delete merged remote branches
-git branch -r --merged main | grep origin | grep -v "main\|master\|develop\|HEAD" | cut -d/ -f2- | xargs -n 1 git push origin --delete
+# Batch delete merged remote branches — list them first, delete only after the user explicitly confirms
+git branch -r --merged main | grep origin | grep -v "main\|master\|develop\|HEAD" | cut -d/ -f2-
+git branch -r --merged main | grep origin | grep -v "main\|master\|develop\|HEAD" | cut -d/ -f2- | xargs -n 1 -p git push origin --delete
 ```
 
 ## Common Mistakes
@@ -127,6 +126,5 @@ git branch -r --merged main | grep origin | grep -v "main\|master\|develop\|HEAD
 | Mistake | Fix |
 |---------|-----|
 | Using `-D` (force) when `-d` would do | `-d` refuses unmerged branches — let it. Only `-D` when the user confirms the branch is disposable. |
-| Deleting a branch not merged into the default branch | Always check `git branch --merged main` first. |
-| Forgetting to prune remote tracking refs | Run `git remote prune origin` after remote deletions. |
+| Forgetting to prune remote tracking refs | Run `git fetch --prune origin` after remote deletions. |
 | Not protecting important branches | Set protection rules in GitHub/Azure DevOps, not just locally. |

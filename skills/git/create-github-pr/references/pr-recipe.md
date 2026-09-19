@@ -1,3 +1,5 @@
+<!-- Mirrored between create-github-pr and azure-devops-create-pr (references/pr-recipe.md) — edit both copies. -->
+
 # PR Recipe (shared)
 
 Shared recipe for creating a pull request, used by the `create-github-pr` (GitHub) and

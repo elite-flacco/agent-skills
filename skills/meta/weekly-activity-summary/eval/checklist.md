@@ -8,8 +8,8 @@ Run against the generated summary before saving.
 - [ ] Every agent whose log directory exists was scanned; agents with no directory were skipped silently (not errored)
 - [ ] Week boundaries are Monday 00:00:00 → Sunday 23:59:59 local time; filename is the Monday's date
 - [ ] No project section lists zero sessions (empty projects omitted)
-- [ ] Claude Code data came from both the session index AND the JSONL files (JSONL is authoritative for recent sessions)
-- [ ] Codex data read from both `session_index.jsonl` and `history.jsonl`
+- [ ] Claude Code data read from the per-session JSONL files (and the session index if present)
+- [ ] Codex data read from `session_index.jsonl` (and `history.jsonl` if present)
 - [ ] Project paths discovered dynamically per agent — no hardcoded username or drive prefix
 
 ## Quality Checks (must pass 80%+)

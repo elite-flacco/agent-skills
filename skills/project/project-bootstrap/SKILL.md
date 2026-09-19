@@ -1,11 +1,11 @@
 ---
 name: project-bootstrap
-description: Use when starting a brand new project, scaffolding a fresh repo, or before running superpowers:writing-plans / executing-plans / subagent-driven-development on a repo that lacks lint/typecheck/format scripts, CI workflows, or a verify hook. Triggers on "bootstrap this project", "set up new project", or "use project-bootstrap". Works across Claude Code, ZCode, and Codex runtimes.
+description: Use when starting a brand new project, scaffolding a fresh repo, or before running superpowers:writing-plans / executing-plans / subagent-driven-development on a repo that lacks lint/typecheck/format scripts, CI workflows, or a verify hook. 
 ---
 
 # Project Bootstrap
 
-One-time setup for a new project so that every subsequent superpowers spec → plan → subagent flow is gated by automated checks (lint, typecheck, format, tests) at three layers: the `verify` script, a `Stop` hook that re-runs it, and CI. Runtime-agnostic — detects which coding agent(s) are installed and wires the hook for each.
+One-time setup so that every subsequent superpowers spec → plan → subagent flow is gated by automated checks (lint, typecheck, format, tests) at three layers: the `verify` script, a `Stop` hook that re-runs it, and CI.
 
 ## When to invoke
 
@@ -36,7 +36,7 @@ Invoke `add-scripts`. It adds `lint`, `typecheck`, `format`, `format:check` to `
 
 ### Step 3 — Add CI workflows
 
-Invoke `add-github-actions`. It copies workflow defaults into `.github/` and confirms the shared `update-changelog` and `update-readme` skills are available.
+Invoke `add-github-actions`. It copies workflow defaults into `.github/`.
 
 After it finishes, open `.github/workflows/ci.yml` and confirm the job runs:
 
@@ -62,31 +62,18 @@ If the project has no test suite yet, drop `&& npm run test:run` until tests exi
 
 ### Step 5 — Wire the verify-gate hook
 
-The verify-gate runs `npm run verify` when a coding agent finishes a turn that changed code. It's the same command in every runtime — only the config wrapper, the available hook events, and the timeout unit differ. See `references/runtime-configs.md` for the per-runtime details.
+The verify-gate re-runs `npm run verify` when an agent finishes a turn that changed code.
 
-1. **Detect installed runtimes.** Check for `~/.claude`, `~/.zcode`, `~/.codex` (home directories). Wire a config for each one present so the gated repo works no matter which agent opens it. If none are detected, ask the user which runtime they use.
-2. **Copy the matching template(s)** from this skill to the target path:
-
-   | Runtime | Template | Target path |
-   |---|---|---|
-   | Claude Code | `templates/hooks.claude.json` | `.claude/settings.json` |
-   | ZCode | `templates/hooks.zcode.json` | `.zcode/config.json` |
-   | Codex | `templates/hooks.codex.json` | `.codex/hooks.json` |
-
+1. **Detect installed runtimes.** Check for `~/.claude`, `~/.zcode`, `~/.codex`, `~/.pi` (home directories). Wire a config for each one present so the gated repo works no matter which agent opens it. Pi has no hook support; CI is the verification backstop there. If none are detected, ask the user which runtime they use.
+2. **Copy the matching template(s)** from `templates/` to the target config: `hooks.claude.json` → `.claude/settings.json`, `hooks.zcode.json` → `.zcode/config.json`, `hooks.codex.json` → `.codex/hooks.json`.
 3. **Merge, don't overwrite.** If the target config already exists, merge the hook arrays in rather than replacing the file.
 4. **Codex trust:** Codex skips hooks until reviewed — tell the user to run `/hooks` and trust the new hook before it will fire.
 
-The shared gate command in all three templates is:
-
-```bash
-git diff --quiet HEAD || npm run verify || exit 2
-```
-
-`git diff --quiet HEAD` exits 0 when the working tree matches HEAD, so verify is skipped for read-only turns. On failure, `exit 2` tells every runtime to surface the failure to the agent (block-and-continue) rather than silently erroring.
+Per-runtime wiring details and differences: `references/runtime-configs.md`.
 
 ### Step 6 — Drop the plan DoD template into the repo
 
-Copy `templates/plan-dod.md` (from this skill) to `docs/superpowers/plan-dod.md` (or wherever the project keeps superpowers docs). When invoking `superpowers:writing-plans` later, paste this block into the plan prompt so every task inherits the same Definition of Done.
+Copy `templates/plan-dod.md` (from this skill) to `docs/superpowers/plan-dod.md` (or wherever the project keeps superpowers docs). When invoking `superpowers:writing-plans` later, paste this block into the plan prompt.
 
 ### Step 7 — Append plan-authoring rule to `AGENTS.md` and `CLAUDE.md`
 
@@ -95,8 +82,6 @@ This makes the DoD self-enforcing — without it, the user has to remember to pa
 1. For each of `AGENTS.md` and `CLAUDE.md` at the repo root: if it doesn't exist, create it.
 2. Append the contents of `templates/agents-md-block.md` (from this skill) to both files.
 3. If a "Plan authoring rules" section already exists in either file, merge — don't duplicate.
-
-Result: future agent sessions read this rule before invoking `superpowers:writing-plans` and automatically inject the DoD + final docs task into the plan prompt.
 
 ### Step 8 — Verify the gate works end-to-end
 
@@ -113,13 +98,13 @@ git add package.json package-lock.json .github .claude .zcode .codex docs/superp
 git commit -m "chore: bootstrap scripts, CI, verify hook, plan DoD, plan-authoring rule"
 ```
 
-(Add only the runtime config dirs you actually created — drop `.claude`/`.zcode`/`.codex` as needed.)
+(Drop `.claude`/`.zcode`/`.codex` for runtimes you didn't wire.)
 
 ### Step 10 — Hand off
 
-Tell the user bootstrap is complete and they can now invoke `superpowers:brainstorming` or write a spec. The plan-authoring rule in `AGENTS.md` and `CLAUDE.md` will inject the DoD and final docs task into every `writing-plans` invocation. If they use Codex, remind them to run `/hooks` to trust the new verify hook.
+Tell the user bootstrap is complete and they can now invoke `superpowers:brainstorming` or write a spec. If they use Codex, remind them to run `/hooks` to trust the new verify hook.
 
-## Optional: pre-commit gate (third layer)
+## Optional: pre-commit gate
 
 If the user wants commits blocked locally too, `husky` + `lint-staged` (or the lighter `simple-git-hooks`) are the common choices:
 
@@ -133,23 +118,15 @@ Skip on large test suites where this slows commits unacceptably — CI already c
 
 ## Files this skill creates or modifies
 
-| Path | Action |
-|------|--------|
-| `package.json` | add `lint` / `typecheck` / `format` / `format:check` / `verify` scripts |
-| `.github/workflows/*.yml` | copied by `add-github-actions` |
-| `.github/dependabot.yml` | copied by `add-github-actions` |
-| `.claude/settings.json` | add `Stop` + `SubagentStop` verify hook (Claude Code runtime) |
-| `.zcode/config.json` | add `Stop` verify hook (ZCode runtime) |
-| `.codex/hooks.json` | add `Stop` + `SubagentStop` verify hook (Codex runtime) |
-| `docs/superpowers/plan-dod.md` | new — per-task DoD + final docs task |
-| `AGENTS.md` | append "Plan authoring rules" section so the DoD self-injects into `writing-plans` |
-| `CLAUDE.md` | append the same "Plan authoring rules" section (Claude Code reads `CLAUDE.md` as its primary memory file) |
+- `package.json` — lint/typecheck/format/verify scripts
+- `.github/workflows/*.yml` and `.github/dependabot.yml` — via `add-github-actions`
+- `.claude/settings.json`, `.zcode/config.json`, `.codex/hooks.json` — verify-gate hook, one per detected runtime
+- `docs/superpowers/plan-dod.md` — per-task DoD + final docs task
+- `AGENTS.md` and `CLAUDE.md` — appended "Plan authoring rules" section
 
 Only the runtime configs you actually need are created — one per detected runtime.
 
 ## Notes
 
-- **Per-subagent vs per-turn.** Claude Code and Codex support a `SubagentStop` event (verify re-runs after each subagent finishes). ZCode does not — its gate fires on `Stop` (turn end) only. In all three, CI remains the per-commit backstop.
 - **If `npm run verify` is too slow** for tight loops, scope the hook command (e.g. `npm run typecheck && npm run lint`) and let CI catch the rest. Don't disable the hook entirely.
-- **Cross-runtime differences** — timeout units (ms vs seconds), config shape, and enablement flags — are documented in `references/runtime-configs.md`. The hook *command* is identical everywhere.
-- This skill does **not** auto-fire. The user invokes it manually on new repos.
+- This skill does **not** auto-fire; the user invokes it manually.

@@ -11,7 +11,7 @@ description: Use when [specific triggering conditions and symptoms]
 ---
 ```
 
-- **name:** kebab-case, verb-first when possible (e.g., `creating-reports` not `report-creator`)
+- **name:** kebab-case, verb-first when possible (e.g., `create-reports` not `report-creation`)
 - **description:** Max 1024 chars. Starts with "Use when..." Describes ONLY triggering conditions.
   - NEVER summarize the skill's workflow or process in the description
   - Why: Claude may follow the description shortcut instead of reading the full skill body
@@ -36,7 +36,7 @@ description: Use when creating a new skill, updating an existing skill, or restr
 Three loading levels — respect them:
 
 1. **Metadata** (name + description) — always in context. ~100 words max.
-2. **SKILL.md body** — loaded when skill triggers. Target: <150 lines (structured) or <500 lines (simple).
+2. **SKILL.md body** — loaded when skill triggers. Target: <150 lines (structured) or <200 lines (simple). Reference files can be longer.
 3. **Bundled resources** — loaded as needed. Unlimited size.
 
 Keep SKILL.md lean by pointing to reference files instead of inlining heavy content.

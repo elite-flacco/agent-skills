@@ -87,5 +87,5 @@ Present the skill to the user. Iterate on feedback until approved.
 - One question at a time during interview
 - Only scaffold directories identified as needed — no empty placeholders
 - SKILL.md description starts with "Use when..." — never summarize workflow
-- Keep structured SKILL.md under 150 lines; simple under 500
+- Keep structured SKILL.md under 150 lines; simple under 200
 - No README, CHANGELOG, or auxiliary docs in skill directories

@@ -5,14 +5,16 @@ description: Use when the user asks to merge or integrate the current feature br
 
 # Merge The Current Branch
 
-Merge the current feature branch into `main` and push. Ignore untracked files or uncommitted changes.
+Merge the current feature branch into `main` and push. Run `git status --porcelain` first. If dirty, ask the user — commit, or stash with `git stash push --include-untracked` and `git stash pop` after the merge. Never ignore a dirty tree.
 
 ## Instructions
 
-1. **Confirm the target** — identify the main branch (`main` or `master`) and current branch:
+1. **Confirm the target** — detect the default branch and current branch:
    ```bash
    git branch --show-current
+   git symbolic-ref --short refs/remotes/origin/HEAD   # fallback: main/master from `git branch -a`
    ```
+   Use the detected name in place of `main` in the steps below.
 2. **Check CI** — confirm CI is green on the open PR before merging:
    ```bash
    gh pr checks
@@ -35,8 +37,12 @@ Merge the current feature branch into `main` and push. Ignore untracked files or
    ```bash
    git push origin main
    ```
-7. **Clean up** (optional) — delete the merged local and remote branch:
+7. **Clean up** (optional) — delete the merged local and remote branch. Delete the remote branch only after the user explicitly confirms:
    ```bash
    git branch -d <branch-name>
    git push origin --delete <branch-name>
    ```
+
+## Notes
+
+- If a PR exists for this branch, or the push to the default branch is rejected by branch protection, use `gh pr merge` instead.

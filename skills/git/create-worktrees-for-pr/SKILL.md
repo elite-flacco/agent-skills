@@ -25,7 +25,7 @@ Read `create-worktree` before proceeding and apply its shared placement, gitigno
    ```bash
    gh pr list --json headRefName --jq '.[].headRefName' | while read -r branch; do
      path=".worktrees/$branch"
-     if [ -d "$path" ]; then
+     if git worktree list --porcelain | grep -q "worktree $path" || [ -d "$path" ]; then
        echo "Worktree for $branch already exists — skipping"
        continue
      fi

@@ -9,7 +9,7 @@ Any of these suggest structured mode:
 - **Output-producing:** Skill creates user-facing content (writing, reports, designs, presentations)
 - **Multiple rule categories:** Distinct sets of rules that don't belong in one section (voice rules, formatting rules, domain rules, section-specific guidance)
 - **Subjective quality:** Output quality benefits from annotated good/bad examples
-- **Large scope:** Content would exceed ~200 lines as a single SKILL.md
+- **Large scope:** Content would exceed 200 lines as a single SKILL.md
 - **Verifiable criteria:** There are concrete pass/fail criteria worth codifying in a checklist
 - **Scripted operations:** Repeatable tasks best handled by deterministic scripts (file transforms, data processing, code generation)
 

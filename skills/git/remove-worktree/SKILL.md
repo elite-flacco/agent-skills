@@ -1,6 +1,6 @@
 ---
 name: remove-worktree
-description: Use when the user asks to remove a git worktree.
+description: Use when the user asks to remove, delete, or clean up a git worktree.
 ---
 
 # Remove Worktree
@@ -29,4 +29,8 @@ Remove the git worktree the user names and delete its directory.
 5. **Prune** stale worktree admin entries if any remain:
    ```bash
    git worktree prune
+   ```
+6. **Confirm** with `git worktree list` that the path is gone; report the branches deleted:
+   ```bash
+   git worktree list
    ```

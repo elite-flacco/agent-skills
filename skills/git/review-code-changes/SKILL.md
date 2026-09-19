@@ -47,14 +47,7 @@ Review a branch or staged changes like a senior engineer seeing the diff for the
    - Exercise the changed flow like a user: load the relevant page, interact with controls, test at least one mobile-ish and one desktop viewport, and inspect console errors.
    - Check that text does not overlap, controls are reachable, loading and error states are coherent, and the visible result matches the intended behavior.
 
-## Parallel Review Agents
-
-Default to a single reviewer. Go parallel only for large diffs spanning multiple subsystems (e.g. backend + frontend + config), or when browser verification or third-party docs research can run independently of code analysis. Skip it when findings depend on shared whole-system understanding or the review needs a single product judgment.
-
-When dispatching subagents:
-1. Scope the diff yourself first, then split by review lens or subsystem — never "review everything" prompts. Lenses match the review lenses above.
-2. Give each subagent exact files, commands, docs targets, and output format; they return findings only and must not edit, stage, commit, or switch branches.
-3. Read all results, deduplicate, resolve contradictions, rank severity, and write one final review.
+For large multi-subsystem diffs, dispatch parallel review agents — see `references/parallel-review.md`.
 
 ## Output Format
 
@@ -74,18 +67,8 @@ Then include:
 
 If no issues are found, say that clearly and still report residual risk and checks run.
 
-## Common Mistakes
+Check `references/common-mistakes.md` before finalizing.
 
-| Mistake | Fix |
-|---------|-----|
-| Trusting docs, comments, memory, or PR text before reading code | Build the model from changed code first, then compare outside context for drift |
-| Reviewing only the diff | Read nearby callers, tests, config, schema, routes, and runtime entry points |
-| Treating clean code as correct behavior | Trace the functional workflow and verify the change logically solves the real user or product problem |
-| Guessing SDK or framework behavior from memory | Verify new, upgraded, unfamiliar, or behavior-critical third-party usage against official version-specific sources |
-| Treating a passing test suite as evidence of correctness | Tests pass against the author's own assumptions; run the code against real data — the live DB, local source files, actual API responses — to surface what they didn't expect |
-| Trusting a comment that asserts third-party behavior | A comment like "this is free" or "the API requires X" is an unverified claim; read the actual doc, spec, or SDK field and confirm it independently |
-| Spawning subagents before understanding scope | Scope the diff first, then delegate narrow independent lenses and synthesize one final review |
-| Reporting style preferences as bugs | Prioritize behavior, architecture risk, maintainability, tests, and user impact |
-| Skipping UI verification because code compiles | Use the in-app browser where possible and agent-browser for repeatable user-flow checks |
-| Asking for generic test coverage | Name the specific scenario or regression the missing test should catch |
-| Fixing during review | Do not edit unless the user asks to address the findings |
+## Notes
+
+- To enumerate PRs first, use the `list-github-prs` skill.

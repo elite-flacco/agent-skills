@@ -1,6 +1,6 @@
 ---
 name: list-github-prs
-description: Use when the user asks to list, show, or review open pull requests on GitHub — e.g. "show my PRs", "what PRs are open", "list pull requests", "show open PRs across my repos", "gh pr list", or review PRs across repositories.
+description: Use when the user asks to list, show, or summarize open pull requests on GitHub — e.g. "show my PRs", "what PRs are open", "list pull requests", "show open PRs across my repos", "gh pr list", or summarize PRs across repositories.
 ---
 
 # List GitHub Pull Requests
@@ -9,7 +9,7 @@ List all open PRs on the current repo, or across all of the authenticated GitHub
 
 ## Instructions
 
-1. Check if the `--all` flag is provided.
+1. If the user asks for PRs across all their repositories (e.g. "all my repos"), use `--all`.
 2. If `--all`:
    - Get the authenticated GitHub user's username using `gh api user`.
    - List all repositories owned by the user using `gh repo list --limit 1000 --json nameWithOwner`.

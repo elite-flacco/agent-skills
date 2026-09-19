@@ -28,7 +28,7 @@ Create a safe linked checkout for a new or existing branch.
    - Existing local branch: `git worktree add .worktrees/<branch-name> <branch-name>`
    - New branch: `git worktree add -b <branch-name> .worktrees/<branch-name> <base-ref>`
 
-   Use the base ref requested by the user. If none was requested, use the currently checked-out commit and state that choice. Do not attach a branch already checked out in another worktree.
+   Use the base ref requested by the user. If none was requested, use the currently checked-out commit and state that choice. Do not attach a branch already checked out in another worktree. Uncommitted changes stay in the main checkout.
 
 5. Copy environment files from the main checkout into the new worktree root, in order, whichever exist:
    - `.env`

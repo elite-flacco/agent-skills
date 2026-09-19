@@ -29,7 +29,7 @@ Vue 3 + TypeScript + Vite; prompts for router, Pinia, Vitest, ESLint/Prettier.
 ## Web — Angular
 
 ```bash
-npx @angular/cli new <name> --style=scss --routing
+npx @angular/cli new <name> --style=scss
 ```
 
 Angular CLI project with TypeScript, Karma/Jasmine testing, and Angular's own
@@ -56,26 +56,26 @@ pip install "fastapi[standard]"
 ```
 
 Create `app/main.py` with an `APIRouter`, `app/models/` for Pydantic, and
-`tests/` with `pytest`. Add `pyproject.toml` for ruff/mypy/black config (see
-`add-scripts/references/toolchains.md`).
+`tests/` with `pytest`. Add `pyproject.toml` for ruff/mypy/black config (the
+`add-scripts` skill defines these toolchain defaults).
 
 ## Mobile — React Native
 
 ```bash
-npx react-native init <name> --template react-native-template-typescript
+npx @react-native-community/cli@latest init <name>
 ```
 
-Or Expo: `npx create-expo-app <name>`. Includes Metro, the native toolchain,
-and Jest.
+TypeScript is the default template. Or Expo: `npx create-expo-app <name>`.
+Includes Metro, the native toolchain, and Jest.
 
 ## Desktop — Electron
 
 ```bash
-npm init electron-app@latest <name> -- --template=typescript
+npm init electron-app@latest <name> -- --template=vite-typescript
 ```
 
-Electron Forge scaffold with `src/main.ts` (main process) and `src/renderer/`
-(UI). Add a bundler (Vite/Webpack) for the renderer.
+Electron Forge scaffold with `src/main.ts` (main process), `src/renderer/`
+(UI), and Vite bundling built in (`webpack-typescript` is the alternative).
 
 ## CLI — Node
 

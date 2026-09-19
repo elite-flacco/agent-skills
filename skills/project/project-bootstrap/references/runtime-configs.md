@@ -6,7 +6,7 @@ The verify-gate hook is the same command in every runtime:
 git diff --quiet HEAD || npm run verify || exit 2
 ```
 
-Only the **config wrapper**, the **available hook events**, the **timeout unit**,
+Only the **config wrapper**, the **available hook events**,
 and the **enablement flag** differ. Detect which runtime(s) are installed and
 copy the matching template(s) from `templates/`.
 
@@ -18,7 +18,7 @@ copy the matching template(s) from `templates/`.
 | Wrapper | `{ "hooks": { <Event>: [...] } }` | `{ "hooks": { "enabled": true, "events": { <Event>: [...] } } }` | `{ "hooks": { <Event>: [...] } }` |
 | `SubagentStop` | ✅ | ❌ (not a supported event) | ✅ |
 | `Stop` | ✅ | ✅ | ✅ |
-| `timeout` unit | **milliseconds** | **seconds** | **seconds** |
+| `timeout` unit | **seconds** (default 600) | **seconds** | **seconds** |
 | Enablement | on by default | needs `"enabled": true` | on by default; needs `/hooks` trust review |
 | Memory file | `CLAUDE.md` (reads `AGENTS.md` too) | `AGENTS.md` | `AGENTS.md` |
 
@@ -32,31 +32,29 @@ fires at turn end — CI remains the per-commit backstop there.
 
 ### Claude Code → `.claude/settings.json`
 
-Timeouts in **milliseconds**. `SubagentStop` + `Stop` both wired.
+Timeouts in **seconds** (default 600). `SubagentStop` + `Stop` both wired.
 
 ```json
 {
   "hooks": {
     "SubagentStop": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
             "command": "git diff --quiet HEAD || npm run verify || exit 2",
-            "timeout": 180000
+            "timeout": 180
           }
         ]
       }
     ],
     "Stop": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
             "command": "git diff --quiet HEAD || npm run verify || exit 2",
-            "timeout": 180000
+            "timeout": 180
           }
         ]
       }
