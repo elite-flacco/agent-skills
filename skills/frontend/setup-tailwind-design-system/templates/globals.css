@@ -32,16 +32,6 @@
   --color-badge-4-foreground: var(--badge-4-foreground);
   --color-badge-5:            var(--badge-5);
   --color-badge-5-foreground: var(--badge-5-foreground);
-
-  --font-size-xs:   var(--text-xs);
-  --font-size-sm:   var(--text-sm);
-  --font-size-base: var(--text-base);
-  --font-size-lg:   var(--text-lg);
-  --font-size-xl:   var(--text-xl);
-  --font-size-2xl:  var(--text-2xl);
-  --font-size-3xl:  var(--text-3xl);
-  --font-size-4xl:  var(--text-4xl);
-  --font-size-5xl:  var(--text-5xl);
 }
 
 /* ============================================================
@@ -89,8 +79,8 @@
   --text-xl:   clamp(1.25rem,  1.15rem  + 0.5vw,   1.5rem);   /* 20→24px */
   --text-2xl:  clamp(1.5rem,   1.35rem  + 0.75vw,  1.875rem); /* 24→30px */
   --text-3xl:  clamp(1.875rem, 1.65rem  + 1.125vw, 2.25rem);  /* 30→36px */
-  --text-4xl:  clamp(2rem,     1.8rem   + 1.35vw,  2.75rem);  /* 32→44px */
-  --text-5xl:  clamp(2.5rem,   2.2rem   + 1.8vw,   3.5rem);   /* 40→56px */
+  --text-4xl:  clamp(2.25rem,  1.95rem  + 1.5vw,   3rem);     /* 36→48px */
+  --text-5xl:  clamp(3rem,     2.55rem  + 2.25vw,  4rem);     /* 48→64px */
 
   /* Line Heights */
   --leading-tight:   1.25;
